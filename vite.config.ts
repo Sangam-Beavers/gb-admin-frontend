@@ -19,6 +19,8 @@ export default defineConfig({
   server: {
     // 모바일 앱(5173)과 충돌 방지.
     port: 5174,
+    // 5174 점유 시 자동 fallback(5175 등) 대신 명확히 실패시킨다 — 충돌을 조용히 넘기지 않도록.
+    strictPort: true,
     proxy: {
       '/api/v1/admin': {
         target: ADMIN_BACKEND,

@@ -15,29 +15,31 @@ import type { DomainSlo, ServiceHealth } from '@/types/admin';
 import styles from './Monitoring.module.css';
 
 function sloTone(slo: DomainSlo) {
-  const remain = Number(slo.error_budget_remaining_pct);
-  if (remain >= 80) return 'success' as const;
-  if (remain >= 50) return 'info' as const;
-  if (remain >= 25) return 'warning' as const;
+  const current = Number(slo.current);
+  const target = Number(slo.target);
+  if (current >= target) return 'success' as const;
+  if (current >= target - 5) return 'warning' as const;
   return 'danger' as const;
 }
 
 function sloColor(slo: DomainSlo) {
-  const remain = Number(slo.error_budget_remaining_pct);
-  if (remain >= 80) return '#10B981';
-  if (remain >= 50) return '#0EA5E9';
-  if (remain >= 25) return '#F59E0B';
+  const current = Number(slo.current);
+  const target = Number(slo.target);
+  if (current >= target) return '#10B981';
+  if (current >= target - 5) return '#F59E0B';
   return '#EF4444';
 }
 
 function SloCard({ slo }: { slo: DomainSlo }) {
-  const remain = Number(slo.error_budget_remaining_pct);
-  const data = [{ name: slo.name, value: remain }];
+  const current = Number(slo.current);
+  const target = Number(slo.target);
+  const achieved = current >= target;
+  const data = [{ name: slo.name, value: current }];
   return (
     <div className={styles.sloCard}>
       <div className={styles.sloHeader}>
         <span className={styles.sloLabel}>{slo.label}</span>
-        <Badge tone={sloTone(slo)}>{slo.current}%</Badge>
+        <Badge tone={sloTone(slo)}>{achieved ? '목표 달성' : '목표 미달'}</Badge>
       </div>
       <div className={styles.sloChart}>
         <ResponsiveContainer width="100%" height={140}>
@@ -53,8 +55,8 @@ function SloCard({ slo }: { slo: DomainSlo }) {
           </RadialBarChart>
         </ResponsiveContainer>
         <div className={styles.sloChartLabel}>
-          <strong>{remain.toFixed(0)}%</strong>
-          <small>Error budget</small>
+          <strong>{current.toFixed(1)}%</strong>
+          <small>성공률</small>
         </div>
       </div>
       <div className={styles.sloMeta}>
