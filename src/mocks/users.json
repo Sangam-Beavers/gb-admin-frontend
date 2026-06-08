@@ -1,0 +1,49 @@
+{
+  "users": [
+    {
+      "public_id": "u_01",
+      "email": "linh@gb.com",
+      "nickname": "Linh",
+      "country_code": "VN",
+      "country_label": "베트남",
+      "document_type": "외국인등록증",
+      "ocr_result": "MATCH",
+      "ocr_result_label": "일치",
+      "kyc_status": "PENDING"
+    },
+    {
+      "public_id": "u_02",
+      "email": "chen@gb.com",
+      "nickname": "Chen",
+      "country_code": "CN",
+      "country_label": "중국",
+      "document_type": "본국 신분증",
+      "ocr_result": "REVIEW_NEEDED",
+      "ocr_result_label": "확인 필요",
+      "kyc_status": "NEEDS_REVIEW"
+    },
+    {
+      "public_id": "u_03",
+      "email": "minh@gb.com",
+      "nickname": "Minh",
+      "country_code": "VN",
+      "country_label": "베트남",
+      "document_type": "외국인등록증",
+      "ocr_result": "MATCH",
+      "ocr_result_label": "일치",
+      "kyc_status": "PENDING"
+    },
+    {
+      "public_id": "u_04",
+      "email": "tara@gb.com",
+      "nickname": "Tara",
+      "country_code": "TH",
+      "country_label": "태국",
+      "document_type": "외국인등록증",
+      "ocr_result": "MISMATCH",
+      "ocr_result_label": "불일치",
+      "kyc_status": "NEEDS_REVIEW"
+    }
+  ],
+  "total": 4
+}

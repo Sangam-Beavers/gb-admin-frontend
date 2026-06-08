@@ -1,0 +1,158 @@
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-muted);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.backBtn:hover {
+  background: #f8fafc;
+  color: var(--admin-text);
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.sectionSub {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 24px 0 12px;
+}
+
+.notice {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+  border-bottom: 1px dashed var(--admin-border);
+  padding-bottom: 12px;
+}
+
+.kvBlock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kvKey {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--admin-muted);
+  font-weight: 600;
+}
+
+.kvVal {
+  font-size: 13px;
+  color: var(--admin-text);
+}
+
+.txId {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  background: #f1f5f9;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: var(--admin-text);
+}
+
+.summaryLine {
+  font-size: 14px;
+  color: var(--admin-text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.summaryLine strong {
+  font-weight: 700;
+}
+
+.summaryArrow {
+  color: var(--admin-muted);
+  margin: 0 4px;
+}
+.summarySep {
+  color: var(--admin-muted);
+}
+.summaryAmount {
+  font-weight: 700;
+  color: var(--admin-primary);
+  font-variant-numeric: tabular-nums;
+}
+.summaryType {
+  color: var(--admin-muted);
+  font-size: 13px;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.mono {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+.subtle {
+  font-size: 11px;
+  color: var(--admin-muted);
+}
+
+.balanceCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.balanceCell .before {
+  color: var(--admin-muted);
+}
+.balanceCell .arrow {
+  color: var(--admin-muted);
+}
+.increase .after {
+  color: var(--admin-success);
+  font-weight: 600;
+}
+.decrease .after {
+  color: var(--admin-danger);
+  font-weight: 600;
+}
+.same .after {
+  color: var(--admin-text);
+}

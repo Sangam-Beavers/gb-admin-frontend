@@ -1,0 +1,161 @@
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.sectionSub {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 24px 0 12px;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 1100px) {
+  .statGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sloGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 1100px) {
+  .sloGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.queueGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 1100px) {
+  .queueGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.sloCard {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 14px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.sloHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sloLabel {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--admin-text);
+}
+
+.sloChart {
+  position: relative;
+}
+
+.sloChartLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.sloChartLabel strong {
+  font-size: 18px;
+  font-weight: 700;
+}
+.sloChartLabel small {
+  font-size: 10px;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.sloMeta {
+  text-align: center;
+  font-size: 12px;
+  color: var(--admin-muted);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+@media (max-width: 900px) {
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.panel h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.authMsg {
+  font-size: 14px;
+}
+
+.configList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.configList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.configList code {
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #334155;
+  font-size: 12px;
+}
+
+.embedGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 1100px) {
+  .embedGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,177 @@
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.subtle {
+  font-size: 11px;
+  color: var(--admin-muted);
+}
+
+.trailBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+  font-size: 12px;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+.trailBtn:hover {
+  background: #eff6ff;
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+}
+
+/* ===== Modal (audit trail drilldown) ===== */
+
+.modalTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modalTxId {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 11px;
+  background: #f1f5f9;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: var(--admin-muted);
+}
+
+.modalNotice {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.modalSummary {
+  background: #f8fafc;
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modalSummaryLine {
+  font-size: 13px;
+  color: var(--admin-text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.modalSummaryLine strong {
+  font-weight: 700;
+}
+
+.modalArrow {
+  color: var(--admin-muted);
+  margin: 0 4px;
+}
+
+.modalSep {
+  color: var(--admin-muted);
+}
+
+.modalAmount {
+  font-weight: 700;
+  color: var(--admin-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.modalType {
+  color: var(--admin-muted);
+  font-size: 12px;
+}
+
+.modalBadgeRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.modalTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.modalTable thead {
+  background: #f8fafc;
+}
+.modalTable thead th {
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid var(--admin-border);
+  text-align: left;
+}
+.modalTable tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+.modalTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.modalThTime {
+  width: 130px;
+}
+.modalThRight {
+  text-align: right;
+}
+
+.modalEmpty {
+  text-align: center;
+  color: var(--admin-muted);
+  padding: 24px 12px;
+}
+
+.mono {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+.balanceCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.balanceCell .before {
+  color: var(--admin-muted);
+}
+.balanceCell .arrow {
+  color: var(--admin-muted);
+}
+.increase .after {
+  color: var(--admin-success);
+  font-weight: 600;
+}
+.decrease .after {
+  color: var(--admin-danger);
+  font-weight: 600;
+}
+.same .after {
+  color: var(--admin-text);
+}

@@ -1,0 +1,29 @@
+{
+  "logs": [
+    {
+      "public_id": "a_01",
+      "admin_email": "admin01@gb.com",
+      "action": "KYC_APPROVE",
+      "action_label": "KYC 승인",
+      "count": 3,
+      "performed_at": "2026-06-08T11:02:00Z"
+    },
+    {
+      "public_id": "a_02",
+      "admin_email": "admin01@gb.com",
+      "action": "POST_HIDE",
+      "action_label": "게시글 숨김",
+      "count": 2,
+      "performed_at": "2026-06-08T10:45:00Z"
+    },
+    {
+      "public_id": "a_03",
+      "admin_email": "admin02@gb.com",
+      "action": "CONFIG_UPDATE",
+      "action_label": "운영 설정 변경",
+      "count": 1,
+      "performed_at": "2026-06-08T09:10:00Z"
+    }
+  ],
+  "total": 3
+}

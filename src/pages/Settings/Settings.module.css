@@ -1,0 +1,30 @@
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.sectionSub {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 24px 0 12px;
+}
+
+.notice {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  padding: 12px 16px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.notice strong {
+  font-weight: 700;
+}
+.notice span {
+  color: #1e40af;
+}

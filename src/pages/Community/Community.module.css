@@ -1,0 +1,40 @@
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.hide,
+.del {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hide {
+  background: #fff;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text);
+}
+.hide:hover {
+  background: #f1f5f9;
+}
+
+.del {
+  background: var(--admin-danger);
+  color: #fff;
+}
+.del:hover {
+  background: #dc2626;
+}

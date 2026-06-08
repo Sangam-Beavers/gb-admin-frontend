@@ -1,0 +1,53 @@
+.headerBlock {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.titleIcon {
+  color: var(--admin-danger);
+}
+
+.lede {
+  color: var(--admin-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+.lede strong {
+  color: var(--admin-danger);
+}
+
+.mono {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+.subtle {
+  font-size: 11px;
+  color: var(--admin-muted);
+}
+
+.amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.reason {
+  font-size: 12px;
+  color: var(--admin-text);
+}
+
+.meta {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--admin-muted);
+  text-align: right;
+}

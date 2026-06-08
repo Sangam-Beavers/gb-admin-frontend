@@ -1,0 +1,246 @@
+import { useTranslation } from 'react-i18next';
+import { Server, Database, Layers, Cpu } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  RadialBarChart,
+  RadialBar,
+  PolarAngleAxis,
+} from 'recharts';
+import StatCard from '@/components/common/StatCard';
+import DataTable, { type ColumnDef } from '@/components/common/DataTable';
+import Badge from '@/components/common/Badge';
+import EmbedFrame from '@/components/common/EmbedFrame';
+import { useMonitoringSnapshot } from '@/hooks/useAdminQueries';
+import type { DomainSlo, ServiceHealth } from '@/types/admin';
+import styles from './Monitoring.module.css';
+
+function sloTone(slo: DomainSlo) {
+  const remain = Number(slo.error_budget_remaining_pct);
+  if (remain >= 80) return 'success' as const;
+  if (remain >= 50) return 'info' as const;
+  if (remain >= 25) return 'warning' as const;
+  return 'danger' as const;
+}
+
+function sloColor(slo: DomainSlo) {
+  const remain = Number(slo.error_budget_remaining_pct);
+  if (remain >= 80) return '#10B981';
+  if (remain >= 50) return '#0EA5E9';
+  if (remain >= 25) return '#F59E0B';
+  return '#EF4444';
+}
+
+function SloCard({ slo }: { slo: DomainSlo }) {
+  const remain = Number(slo.error_budget_remaining_pct);
+  const data = [{ name: slo.name, value: remain }];
+  return (
+    <div className={styles.sloCard}>
+      <div className={styles.sloHeader}>
+        <span className={styles.sloLabel}>{slo.label}</span>
+        <Badge tone={sloTone(slo)}>{slo.current}%</Badge>
+      </div>
+      <div className={styles.sloChart}>
+        <ResponsiveContainer width="100%" height={140}>
+          <RadialBarChart
+            innerRadius="70%"
+            outerRadius="100%"
+            data={data}
+            startAngle={90}
+            endAngle={-270}
+          >
+            <PolarAngleAxis type="number" domain={[0, 100]} angleAxisId={0} tick={false} />
+            <RadialBar background dataKey="value" cornerRadius={8} fill={sloColor(slo)} />
+          </RadialBarChart>
+        </ResponsiveContainer>
+        <div className={styles.sloChartLabel}>
+          <strong>{remain.toFixed(0)}%</strong>
+          <small>Error budget</small>
+        </div>
+      </div>
+      <div className={styles.sloMeta}>
+        목표 {slo.target}% / 현재 {slo.current}%
+      </div>
+    </div>
+  );
+}
+
+export default function Monitoring() {
+  const { t } = useTranslation();
+  const { data } = useMonitoringSnapshot();
+
+  if (!data) {
+    return <div>{t('common.loading')}</div>;
+  }
+
+  const upCount = data.service_health.services.filter((s) => s.status === 'UP').length;
+  const servicesWithLatency = data.service_health.services.filter(
+    (s) => typeof s.response_time_ms === 'number'
+  );
+  const avgLatency =
+    servicesWithLatency.length === 0
+      ? 0
+      : Math.round(
+          servicesWithLatency.reduce((a, s) => a + (s.response_time_ms ?? 0), 0) /
+            servicesWithLatency.length
+        );
+
+  const infraRows: { name: string; value: string; status: 'success' | 'warning' | 'danger' }[] = [
+    { name: 'EKS Pod (member/wallet/community/document)', value: 'Running 8/8', status: 'success' },
+    { name: 'ALB p95 Latency', value: '142 ms', status: 'success' },
+    { name: 'RDS CPU', value: '38 %', status: 'success' },
+    { name: 'Redis Memory', value: '54 %', status: 'success' },
+    { name: 'SQS gb-analysis-results-prod', value: 'depth 0', status: 'success' },
+  ];
+
+  const healthCols: ColumnDef<ServiceHealth>[] = [
+    { key: 'name', header: 'Service', render: (r) => r.name },
+    {
+      key: 'status',
+      header: 'Status',
+      width: '120px',
+      render: (r) => (
+        <Badge tone={r.status === 'UP' ? 'success' : r.status === 'DOWN' ? 'danger' : 'warning'}>
+          {r.status}
+        </Badge>
+      ),
+    },
+    {
+      key: 'rt',
+      header: 'p50',
+      width: '100px',
+      align: 'right',
+      render: (r) => (r.response_time_ms == null ? '-' : `${r.response_time_ms} ms`),
+    },
+  ];
+
+  return (
+    <div>
+      <h2 className={styles.sectionTitle}>{t('monitoring.title')}</h2>
+
+      <div className={styles.statGrid}>
+        <StatCard
+          label="API Gateway"
+          value="OK"
+          hint={`${upCount}/${data.service_health.services.length} services UP`}
+          icon={<Server size={16} />}
+          tone="success"
+        />
+        <StatCard
+          label="DB · Redis"
+          value="Healthy"
+          hint="p50 < 30ms"
+          icon={<Database size={16} />}
+          tone="success"
+        />
+        <StatCard
+          label="OCR Queue"
+          value={data.queues.queues.find((q) => q.name === 'ANALYSIS_FAILED')?.count ?? 0}
+          hint="실패 큐"
+          icon={<Layers size={16} />}
+          tone="warning"
+        />
+        <StatCard
+          label="LLM · RAG"
+          value={`${avgLatency} ms`}
+          hint="Bedrock 평균 latency (mock)"
+          icon={<Cpu size={16} />}
+          tone="info"
+        />
+      </div>
+
+      <h3 className={styles.sectionSub}>{t('monitoring.domainSlo')}</h3>
+      <div className={styles.sloGrid}>
+        {data.domain_slo.slos.map((slo) => (
+          <SloCard key={slo.name} slo={slo} />
+        ))}
+      </div>
+
+      <h3 className={styles.sectionSub}>{t('monitoring.queues')}</h3>
+      <div className={styles.queueGrid}>
+        {data.queues.queues.map((q) => (
+          <StatCard
+            key={q.name}
+            label={q.label}
+            value={q.count}
+            tone={q.count === 0 ? 'success' : q.count > 10 ? 'warning' : 'info'}
+          />
+        ))}
+      </div>
+
+      <h3 className={styles.sectionSub}>{t('monitoring.serviceHealth')}</h3>
+      <DataTable<ServiceHealth>
+        columns={healthCols}
+        rows={data.service_health.services}
+        rowKey={(r) => r.name}
+      />
+
+      <h3 className={styles.sectionSub}>{t('monitoring.infraTitle')}</h3>
+      <DataTable
+        columns={[
+          { key: 'name', header: '항목', render: (r: (typeof infraRows)[number]) => r.name },
+          {
+            key: 'value',
+            header: '값',
+            width: '160px',
+            align: 'right',
+            render: (r: (typeof infraRows)[number]) => r.value,
+          },
+          {
+            key: 'status',
+            header: '상태',
+            width: '110px',
+            align: 'right',
+            render: (r: (typeof infraRows)[number]) => (
+              <Badge tone={r.status}>{r.status === 'success' ? 'OK' : r.status.toUpperCase()}</Badge>
+            ),
+          },
+        ]}
+        rows={infraRows}
+        rowKey={(r) => r.name}
+      />
+
+      <div className={styles.twoCol}>
+        <div className={styles.panel}>
+          <h4>{t('monitoring.authFailures')}</h4>
+          <p className={styles.authMsg}>
+            최근 {data.auth_failures.window_minutes}분 인증 실패 {data.auth_failures.total_failures}건
+          </p>
+        </div>
+        <div className={styles.panel}>
+          <h4>{t('monitoring.config')}</h4>
+          <ul className={styles.configList}>
+            {data.config.configs.map((c) => (
+              <li key={c.key}>
+                <code>{c.key}</code>
+                <strong>
+                  {c.value} {c.currency ?? ''}
+                </strong>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <h3 className={styles.sectionSub}>{t('monitoring.grafanaTitle')}</h3>
+      <div className={styles.embedGrid}>
+        {data.embeds.grafana.map((g) => (
+          <EmbedFrame
+            key={g.name}
+            label={g.label}
+            url={g.url}
+            height={240}
+            placeholder="Grafana 대시보드 - Phase 2 인프라 도입 후 활성화"
+          />
+        ))}
+      </div>
+
+      <h3 className={styles.sectionSub}>{t('monitoring.argocdTitle')}</h3>
+      <EmbedFrame
+        label="ArgoCD Applications"
+        url={data.embeds.argocd.url}
+        height={300}
+        placeholder="ArgoCD - Phase 2 인프라 도입 후 활성화"
+      />
+    </div>
+  );
+}

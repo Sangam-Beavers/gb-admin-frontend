@@ -1,0 +1,60 @@
+{
+  "app": {
+    "name": "Global Bridge Admin",
+    "subtitle": "Operator Web Console · Admins only"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "monitoring": "Monitoring",
+    "transactions": "Transactions",
+    "financialAuditLog": "Financial Audit Log",
+    "chargeAttempts": "Charge Attempts",
+    "users": "Users · KYC",
+    "community": "Community",
+    "documents": "Document AI",
+    "settings": "Settings",
+    "section": {
+      "financial": "Financial Ops",
+      "userOps": "User Ops",
+      "system": "System"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to Global Bridge Admin",
+      "description": "Use an operator account to continue.",
+      "button": "Sign in with Authentik",
+      "skipNote": "When VITE_SKIP_AUTH=true the dashboard is shown immediately."
+    },
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Operations KPI summary",
+    "txTotalLabel": "Today's total transactions",
+    "dauLabel": "DAU",
+    "docsLabel": "Documents analyzed today",
+    "queueLabel": "Pending items",
+    "alertsTitle": "Operations alerts"
+  },
+  "monitoring": {
+    "title": "Monitoring",
+    "serviceHealth": "Service health",
+    "domainSlo": "Domain SLO",
+    "queues": "Operations queues",
+    "authFailures": "Auth failures",
+    "config": "Operations config",
+    "infraTitle": "Infra health",
+    "grafanaTitle": "Grafana dashboards",
+    "argocdTitle": "ArgoCD",
+    "embedPlaceholder": "Will activate after Phase 2 infra rollout."
+  },
+  "common": {
+    "loading": "Loading…",
+    "empty": "No data",
+    "approve": "Approve",
+    "reject": "Reject",
+    "hide": "Hide",
+    "delete": "Delete",
+    "csvDownload": "Download CSV"
+  }
+}

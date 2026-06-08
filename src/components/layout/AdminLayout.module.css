@@ -1,0 +1,20 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+  background: var(--admin-bg);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.main {
+  flex: 1;
+  padding: 24px 28px 40px;
+  max-width: 1480px;
+  width: 100%;
+  margin: 0 auto;
+}

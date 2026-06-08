@@ -1,0 +1,93 @@
+{
+  "service_health": {
+    "services": [
+      { "name": "member-service", "status": "UP", "response_time_ms": 12 },
+      { "name": "wallet-service", "status": "UP", "response_time_ms": 18 },
+      { "name": "document-service", "status": "UP", "response_time_ms": 23 },
+      { "name": "community-service", "status": "UP", "response_time_ms": 15 }
+    ]
+  },
+  "domain_slo": {
+    "slos": [
+      {
+        "name": "REMITTANCE_SUCCESS_RATE",
+        "label": "송금 성공률",
+        "target": "99.5",
+        "current": "99.71",
+        "error_budget_remaining_pct": "88.0",
+        "unit": "PERCENT"
+      },
+      {
+        "name": "AI_ANALYSIS_SUCCESS_RATE",
+        "label": "AI 분석 성공률",
+        "target": "98.0",
+        "current": "99.2",
+        "error_budget_remaining_pct": "65.0",
+        "unit": "PERCENT"
+      },
+      {
+        "name": "KYC_PASS_RATE",
+        "label": "KYC 통과율",
+        "target": "85.0",
+        "current": "87.3",
+        "error_budget_remaining_pct": "74.0",
+        "unit": "PERCENT"
+      },
+      {
+        "name": "CHARGE_SUCCESS_RATE",
+        "label": "충전 성공률",
+        "target": "99.0",
+        "current": "99.5",
+        "error_budget_remaining_pct": "92.0",
+        "unit": "PERCENT"
+      }
+    ]
+  },
+  "queues": {
+    "queues": [
+      { "name": "KYC_PENDING", "label": "KYC 대기", "count": 25 },
+      { "name": "COMMUNITY_REPORTS", "label": "신고 게시글", "count": 17 },
+      { "name": "CHARGE_FAILED", "label": "충전 실패", "count": 3 },
+      { "name": "ANALYSIS_FAILED", "label": "AI 분석 실패", "count": 2 }
+    ]
+  },
+  "auth_failures": { "window_minutes": 5, "total_failures": 0, "by_reason": [] },
+  "config": {
+    "configs": [
+      { "key": "wallet.charge.single-limit", "value": "10000000", "currency": "KRW" },
+      { "key": "wallet.exchange.fee-rate", "value": "0.005", "currency": null },
+      { "key": "wallet.transfer.single-limit", "value": "5000000", "currency": "KRW" },
+      { "key": "document.analysis.timeout-sec", "value": "60", "currency": null }
+    ]
+  },
+  "embeds": {
+    "grafana": [
+      {
+        "name": "kubernetes_cluster",
+        "label": "Kubernetes Cluster",
+        "url": "https://grafana.gb.internal/d/cluster?kiosk=tv&theme=dark"
+      },
+      {
+        "name": "jvm",
+        "label": "JVM Micrometer",
+        "url": "https://grafana.gb.internal/d/jvm?kiosk=tv&theme=dark"
+      },
+      {
+        "name": "rds",
+        "label": "AWS RDS",
+        "url": "https://grafana.gb.internal/d/rds?kiosk=tv&theme=dark"
+      },
+      {
+        "name": "redis",
+        "label": "Redis",
+        "url": "https://grafana.gb.internal/d/redis?kiosk=tv&theme=dark"
+      },
+      {
+        "name": "sqs",
+        "label": "AWS SQS",
+        "url": "https://grafana.gb.internal/d/sqs?kiosk=tv&theme=dark"
+      }
+    ],
+    "argocd": { "url": "https://argocd.gb.internal/applications?showSidebar=false" }
+  }
+}

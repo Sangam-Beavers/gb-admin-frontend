@@ -1,0 +1,65 @@
+{
+  "transactions": [
+    {
+      "public_id": "tx_01",
+      "occurred_at": "2026-06-08T11:23:00Z",
+      "user_email": "linh@gb.com",
+      "user_name": "Linh",
+      "type": "INTERNAL_TRANSFER",
+      "type_label": "앱내이체",
+      "amount": "1200000.0000",
+      "currency_code": "VND",
+      "status": "COMPLETED",
+      "risk": "NORMAL"
+    },
+    {
+      "public_id": "tx_02",
+      "occurred_at": "2026-06-08T10:51:00Z",
+      "user_email": "minh@gb.com",
+      "user_name": "Minh",
+      "type": "EXTERNAL_TRANSFER",
+      "type_label": "타행이체",
+      "amount": "800000.0000",
+      "currency_code": "KRW",
+      "status": "HOLD",
+      "risk": "WARNING"
+    },
+    {
+      "public_id": "tx_03",
+      "occurred_at": "2026-06-08T10:34:00Z",
+      "user_email": "tara@gb.com",
+      "user_name": "Tara",
+      "type": "EXCHANGE",
+      "type_label": "환전",
+      "amount": "120.0000",
+      "currency_code": "USD",
+      "status": "COMPLETED",
+      "risk": "NORMAL"
+    },
+    {
+      "public_id": "tx_04",
+      "occurred_at": "2026-06-08T09:48:00Z",
+      "user_email": "alex@gb.com",
+      "user_name": "Alex",
+      "type": "CHARGE",
+      "type_label": "충전",
+      "amount": "500000.0000",
+      "currency_code": "KRW",
+      "status": "COMPLETED",
+      "risk": "NORMAL"
+    },
+    {
+      "public_id": "tx_05",
+      "occurred_at": "2026-06-08T09:12:00Z",
+      "user_email": "rina@gb.com",
+      "user_name": "Rina",
+      "type": "EXTERNAL_TRANSFER",
+      "type_label": "타행이체",
+      "amount": "9500000.0000",
+      "currency_code": "KRW",
+      "status": "COMPLETED",
+      "risk": "HIGH"
+    }
+  ],
+  "total": 5
+}

@@ -1,0 +1,49 @@
+{
+  "summary": {
+    "today_transactions_total": {
+      "KRW": "82400000.0000",
+      "USD": "12500.0000",
+      "VND": "1234567000.0000"
+    },
+    "daily_active_users": 12430,
+    "today_documents_analyzed": 348,
+    "queues": {
+      "kyc_pending": 25,
+      "community_reports": 17,
+      "charge_failed": 3,
+      "analysis_failed": 2
+    }
+  },
+  "alerts": {
+    "alerts": [
+      {
+        "type": "SUSPICIOUS_TRANSACTION",
+        "label": "이상거래",
+        "message": "고액 송금 3건 탐지",
+        "status": "REVIEW_NEEDED",
+        "created_at": "2026-06-08T10:21:00Z"
+      },
+      {
+        "type": "KYC_PENDING",
+        "label": "KYC",
+        "message": "신분증 OCR 승인 대기 25건",
+        "status": "PENDING",
+        "created_at": "2026-06-08T09:00:00Z"
+      },
+      {
+        "type": "COMMUNITY_REPORT",
+        "label": "커뮤니티",
+        "message": "신고 누적 게시글 17건",
+        "status": "ACTION_NEEDED",
+        "created_at": "2026-06-08T08:30:00Z"
+      },
+      {
+        "type": "ANALYSIS_FAILED",
+        "label": "AI 분석",
+        "message": "OCR 실패 6건 누적",
+        "status": "PENDING",
+        "created_at": "2026-06-08T07:15:00Z"
+      }
+    ]
+  }
+}

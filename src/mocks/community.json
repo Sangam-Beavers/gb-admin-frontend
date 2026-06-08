@@ -1,0 +1,29 @@
+{
+  "reports": [
+    {
+      "post_public_id": "p_001",
+      "title": "부적절한 구인 광고",
+      "author_nickname": "unknown77",
+      "report_count": 8,
+      "reason": "SPAM",
+      "reason_label": "스팸"
+    },
+    {
+      "post_public_id": "p_002",
+      "title": "욕설 댓글 모음",
+      "author_nickname": "user02",
+      "report_count": 4,
+      "reason": "ABUSE",
+      "reason_label": "비방"
+    },
+    {
+      "post_public_id": "p_003",
+      "title": "사칭 의심 글",
+      "author_nickname": "fakerXX",
+      "report_count": 6,
+      "reason": "OTHER",
+      "reason_label": "기타"
+    }
+  ],
+  "total": 3
+}

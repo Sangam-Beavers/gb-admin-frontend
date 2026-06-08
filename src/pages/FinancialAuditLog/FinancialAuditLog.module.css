@@ -1,0 +1,145 @@
+.headerBlock {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.titleIcon {
+  color: var(--admin-primary);
+}
+
+.lede {
+  color: var(--admin-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.mono {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+}
+
+.subtle {
+  font-size: 11px;
+  color: var(--admin-muted);
+}
+
+.name {
+  font-size: 13px;
+  color: var(--admin-text);
+}
+
+.email {
+  color: var(--admin-muted);
+  font-weight: 400;
+}
+
+.actionCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+}
+
+.amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.balanceCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.balanceCell .before {
+  color: var(--admin-muted);
+}
+.balanceCell .arrow {
+  color: var(--admin-muted);
+}
+
+.increase .after {
+  color: var(--admin-success);
+  font-weight: 600;
+}
+.decrease .after {
+  color: var(--admin-danger);
+  font-weight: 600;
+}
+.same .after {
+  color: var(--admin-text);
+}
+
+.meta {
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--admin-muted);
+  text-align: right;
+}
+
+.tableWrap {
+  /* DataTableClickable 자체가 wrapper 를 가지므로 추가 여백만. */
+}
+
+/* === DataTableClickable (테이블 인라인 변형) === */
+.clickableWrap {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.clickableTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.clickableTable thead {
+  background: #f8fafc;
+}
+.clickableTable thead th {
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid var(--admin-border);
+  font-weight: 600;
+}
+.clickableTable tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--admin-text);
+  vertical-align: middle;
+}
+.clickableTable tbody tr:last-child td {
+  border-bottom: none;
+}
+.clickableTable tbody tr:hover {
+  background: #f8fafc;
+}
+
+.clickable {
+  cursor: pointer;
+}
+.clickable:hover {
+  background: #eff6ff !important;
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--admin-muted);
+}

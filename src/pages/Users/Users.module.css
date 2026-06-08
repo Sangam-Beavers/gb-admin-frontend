@@ -1,0 +1,45 @@
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.subtle {
+  font-size: 11px;
+  color: var(--admin-muted);
+}
+
+.actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.approve,
+.reject {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.approve {
+  background: var(--admin-success);
+  color: #fff;
+}
+.approve:hover {
+  background: #059669;
+}
+
+.reject {
+  background: #fff;
+  border: 1px solid var(--admin-danger);
+  color: var(--admin-danger);
+}
+.reject:hover {
+  background: #fef2f2;
+}

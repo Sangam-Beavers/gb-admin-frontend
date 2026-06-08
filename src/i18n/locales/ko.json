@@ -1,0 +1,60 @@
+{
+  "app": {
+    "name": "Global Bridge Admin",
+    "subtitle": "운영자 웹 콘솔 · 관리자 전용"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "monitoring": "Monitoring",
+    "transactions": "Transactions",
+    "financialAuditLog": "Financial Audit Log",
+    "chargeAttempts": "Charge Attempts",
+    "users": "Users · KYC",
+    "community": "Community",
+    "documents": "Document AI",
+    "settings": "Settings",
+    "section": {
+      "financial": "금융 운영",
+      "userOps": "사용자 운영",
+      "system": "시스템"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Global Bridge Admin 로그인",
+      "description": "운영자 권한 계정으로 로그인하세요.",
+      "button": "Authentik으로 로그인",
+      "skipNote": "VITE_SKIP_AUTH=true 인 경우 자동으로 대시보드로 이동합니다."
+    },
+    "logout": "로그아웃"
+  },
+  "dashboard": {
+    "title": "운영 KPI 요약",
+    "txTotalLabel": "오늘 거래 총액",
+    "dauLabel": "DAU (일간 활성 사용자)",
+    "docsLabel": "오늘 분석 문서",
+    "queueLabel": "처리 대기 합계",
+    "alertsTitle": "운영 알림"
+  },
+  "monitoring": {
+    "title": "Monitoring",
+    "serviceHealth": "서비스 헬스",
+    "domainSlo": "도메인 SLO",
+    "queues": "운영 큐",
+    "authFailures": "인증 실패",
+    "config": "운영 설정",
+    "infraTitle": "인프라 헬스",
+    "grafanaTitle": "Grafana 대시보드",
+    "argocdTitle": "ArgoCD",
+    "embedPlaceholder": "Phase 2 인프라 도입 후 활성화됩니다."
+  },
+  "common": {
+    "loading": "불러오는 중…",
+    "empty": "데이터 없음",
+    "approve": "승인",
+    "reject": "반려",
+    "hide": "숨김",
+    "delete": "삭제",
+    "csvDownload": "CSV 다운로드"
+  }
+}
