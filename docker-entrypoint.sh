@@ -1,20 +1,27 @@
 #!/bin/sh
 # ─────────────────────────────────────────────────────────────
-# docker-entrypoint.sh — nginx.conf 의 ${ADMIN_API_URL} 치환 후 nginx 기동
+# docker-entrypoint.sh
 #
-# 환경변수:
-#   ADMIN_API_URL  admin-service 백엔드 주소 (기본: http://localhost:8085)
-#                  stage K8s: http://admin-service.sb-stage-app-ns.svc.cluster.local:8085
+# 1) K8s pod 의 /etc/resolv.conf 에서 CoreDNS IP 추출 → ${KUBE_DNS_IP}
+# 2) nginx.conf 템플릿의 ${ADMIN_API_URL}, ${KUBE_DNS_IP} 치환
+# 3) CRLF 제거(tr -d '\r') — Windows 에서 생성된 파일 대비 안전장치
+# 4) nginx 기동
 # ─────────────────────────────────────────────────────────────
 set -e
 
 : "${ADMIN_API_URL:=http://localhost:8085}"
 
-echo "[entrypoint] ADMIN_API_URL=${ADMIN_API_URL}"
+# K8s /etc/resolv.conf 의 첫 번째 nameserver = CoreDNS ClusterIP
+# 로컬 Docker 환경 fallback: 127.0.0.11 (Docker 내장 DNS)
+KUBE_DNS_IP=$(grep nameserver /etc/resolv.conf 2>/dev/null | awk '{print $2}' | head -1)
+: "${KUBE_DNS_IP:=127.0.0.11}"
 
-# nginx.conf 템플릿에서 ${ADMIN_API_URL}만 치환 (다른 nginx 변수 $host 등은 그대로)
-envsubst '${ADMIN_API_URL}' \
+echo "[entrypoint] ADMIN_API_URL=${ADMIN_API_URL}"
+echo "[entrypoint] KUBE_DNS_IP=${KUBE_DNS_IP}"
+
+envsubst '${ADMIN_API_URL} ${KUBE_DNS_IP}' \
   < /etc/nginx/conf.d/default.conf.template \
+  | tr -d '\r' \
   > /etc/nginx/conf.d/default.conf
 
 exec "$@"

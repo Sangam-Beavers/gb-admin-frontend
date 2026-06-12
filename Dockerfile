@@ -38,7 +38,9 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 
 # 런타임 환경변수 치환 entrypoint
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+# Windows 환경에서 생성된 파일의 CRLF(\r\n)를 LF(\n)로 변환 — nginx/sh 파싱 오류 방지
+RUN sed -i 's/\r//' /etc/nginx/conf.d/default.conf.template /docker-entrypoint.sh && \
+    chmod +x /docker-entrypoint.sh
 
 EXPOSE 80
 
