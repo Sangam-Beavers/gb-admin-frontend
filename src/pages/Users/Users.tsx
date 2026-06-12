@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge from '@/components/common/Badge';
-import { useUsers, useApproveKyc, useRejectKyc } from '@/hooks/useAdminQueries';
+import { useUsers } from '@/hooks/useAdminQueries';
 import { formatDateTime } from '@/utils/format';
 import type { AdminUser, KycStatus } from '@/types/admin';
 import styles from './Users.module.css';
@@ -43,22 +43,9 @@ export default function Users() {
     q: search || undefined,
     kyc_status: status !== 'ALL' ? status : undefined,
   });
-  const approveKyc = useApproveKyc();
-  const rejectKyc = useRejectKyc();
-
   const rows = data?.members ?? [];
 
-  const onApprove = (publicId: string) => {
-    if (!confirm('이 회원의 KYC를 승인하시겠습니까?')) return;
-    approveKyc.mutate(publicId);
-  };
-
-  const onReject = (publicId: string) => {
-    const reason = prompt('거절 사유를 입력하세요 (필수)');
-    if (!reason || !reason.trim()) return;
-    rejectKyc.mutate({ userPublicId: publicId, reason: reason.trim() });
-  };
-
+  // KYC는 자동 승인이라 운영자 수동 승인/반려 UI는 제거(최종안). 상태는 조회·필터로만 노출.
   const columns: ColumnDef<AdminUser>[] = [
     {
       key: 'user',
@@ -90,44 +77,12 @@ export default function Users() {
       width: '110px',
       render: (r) => <Badge tone={kycTone(r.kyc_status)}>{KYC_LABEL[r.kyc_status]}</Badge>,
     },
-    {
-      key: 'actions',
-      header: '처리',
-      width: '180px',
-      align: 'right',
-      render: (r) => (
-        <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.approve}
-            onClick={() => onApprove(r.user_public_id)}
-            disabled={approveKyc.isPending || r.kyc_status === 'APPROVED'}
-          >
-            승인
-          </button>
-          <button
-            type="button"
-            className={styles.reject}
-            onClick={() => onReject(r.user_public_id)}
-            disabled={rejectKyc.isPending || r.kyc_status === 'REJECTED'}
-          >
-            반려
-          </button>
-        </div>
-      ),
-    },
   ];
 
   return (
     <div>
       <h2 className={styles.sectionTitle}>Users · KYC</h2>
-      <FilterBar
-        actions={
-          <button type="button" className="primary" disabled>
-            일괄 승인
-          </button>
-        }
-      >
+      <FilterBar>
         <input
           placeholder="이메일·이름·닉네임 검색"
           value={search}
