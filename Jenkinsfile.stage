@@ -26,10 +26,10 @@ pipeline {
               runAsUser: 0
             resources:
               requests:
-                memory: "512Mi"
+                memory: "1Gi"
                 cpu: "200m"
               limits:
-                memory: "1Gi"
+                memory: "2Gi"
           - name: kaniko-amd64
             image: gcr.io/kaniko-project/executor:debug
             command: ["sleep"]
