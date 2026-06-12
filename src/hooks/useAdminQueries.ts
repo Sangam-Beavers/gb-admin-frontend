@@ -47,6 +47,10 @@ export function useMonitoringSnapshot() {
         ]);
       return { service_health, domain_slo, queues, auth_failures, config, embeds };
     },
+    // 모니터링 화면은 30초마다 자동 갱신. staleTime(전역 30s)을 0으로 덮어써
+    // 화면에 머물러 있어도 주기적으로 최신 헬스/SLO를 가져온다.
+    refetchInterval: 30_000,
+    staleTime: 0,
   });
 }
 

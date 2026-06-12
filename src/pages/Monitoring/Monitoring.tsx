@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Server, Database, Layers, Cpu } from 'lucide-react';
+import { Server, Layers } from 'lucide-react';
 import {
   ResponsiveContainer,
   RadialBarChart,
@@ -75,24 +75,6 @@ export default function Monitoring() {
   }
 
   const upCount = data.service_health.services.filter((s) => s.status === 'UP').length;
-  const servicesWithLatency = data.service_health.services.filter(
-    (s) => typeof s.response_time_ms === 'number'
-  );
-  const avgLatency =
-    servicesWithLatency.length === 0
-      ? 0
-      : Math.round(
-          servicesWithLatency.reduce((a, s) => a + (s.response_time_ms ?? 0), 0) /
-            servicesWithLatency.length
-        );
-
-  const infraRows: { name: string; value: string; status: 'success' | 'warning' | 'danger' }[] = [
-    { name: 'EKS Pod (member/wallet/community/document)', value: 'Running 8/8', status: 'success' },
-    { name: 'ALB p95 Latency', value: '142 ms', status: 'success' },
-    { name: 'RDS CPU', value: '38 %', status: 'success' },
-    { name: 'Redis Memory', value: '54 %', status: 'success' },
-    { name: 'SQS gb-analysis-results-prod', value: 'depth 0', status: 'success' },
-  ];
 
   const healthCols: ColumnDef<ServiceHealth>[] = [
     { key: 'name', header: 'Service', render: (r) => r.name },
@@ -128,25 +110,11 @@ export default function Monitoring() {
           tone="success"
         />
         <StatCard
-          label="DB · Redis"
-          value="Healthy"
-          hint="p50 < 30ms"
-          icon={<Database size={16} />}
-          tone="success"
-        />
-        <StatCard
           label="OCR Queue"
           value={data.queues.queues.find((q) => q.name === 'ANALYSIS_FAILED')?.count ?? 0}
           hint="실패 큐"
           icon={<Layers size={16} />}
           tone="warning"
-        />
-        <StatCard
-          label="LLM · RAG"
-          value={`${avgLatency} ms`}
-          hint="Bedrock 평균 latency (mock)"
-          icon={<Cpu size={16} />}
-          tone="info"
         />
       </div>
 
@@ -176,32 +144,8 @@ export default function Monitoring() {
         rowKey={(r) => r.name}
       />
 
-      <h3 className={styles.sectionSub}>{t('monitoring.infraTitle')}</h3>
-      <DataTable
-        columns={[
-          { key: 'name', header: '항목', render: (r: (typeof infraRows)[number]) => r.name },
-          {
-            key: 'value',
-            header: '값',
-            width: '160px',
-            align: 'right',
-            render: (r: (typeof infraRows)[number]) => r.value,
-          },
-          {
-            key: 'status',
-            header: '상태',
-            width: '110px',
-            align: 'right',
-            render: (r: (typeof infraRows)[number]) => (
-              <Badge tone={r.status}>{r.status === 'success' ? 'OK' : r.status.toUpperCase()}</Badge>
-            ),
-          },
-        ]}
-        rows={infraRows}
-        rowKey={(r) => r.name}
-      />
 
-      <div className={styles.twoCol}>
+<div className={styles.twoCol}>
         <div className={styles.panel}>
           <h4>{t('monitoring.authFailures')}</h4>
           <p className={styles.authMsg}>

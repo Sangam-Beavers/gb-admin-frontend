@@ -166,7 +166,9 @@ export interface UserList extends PageMeta {
   members: AdminUser[];
 }
 
-export type ReportCategory = 'SPAM' | 'ABUSE' | 'FRAUD' | 'OTHER';
+export type ReportReason = 'SPAM' | 'ABUSE' | 'FRAUD' | 'SEXUAL' | 'ETC';
+export type ReportTargetType = 'POST' | 'COMMENT';
+export type ReportStatus = 'PENDING' | 'RESOLVED_DELETED' | 'DISMISSED';
 
 export interface AdminCommunityReport {
   post_public_id: string;
@@ -174,7 +176,9 @@ export interface AdminCommunityReport {
   author_public_id: string;
   author_nickname: string;
   report_count: number;
-  category: ReportCategory;
+  reason: ReportReason;
+  target_type: ReportTargetType;
+  status: ReportStatus;
   last_reported_at: string;
 }
 
