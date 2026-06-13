@@ -154,7 +154,9 @@ export type AlertLevel = 'critical' | 'warning';
 export interface MonAlert {
   level: AlertLevel;
   text: string;
-  source?: string; // APP | RDS | ELASTICACHE 등
+  source?: string; // APP | RDS | ELASTICACHE | SLO | QUEUE | AUTH
+  dashboardUrl?: string; // 이 경보를 확인할 Grafana 대시보드 URL
+  dashboardLabel?: string; // 대시보드 표시명
 }
 
 export interface InfraAlertItem {
@@ -231,6 +233,15 @@ export interface AdminCommunityReport {
 
 export interface CommunityReportList extends PageMeta {
   reports: AdminCommunityReport[];
+}
+
+export interface AdminPostDetail {
+  post_public_id: string;
+  user_public_id: string;
+  title: string;
+  content: string;
+  language: string;
+  created_at: string;
 }
 
 export interface DocumentStats {

@@ -77,3 +77,31 @@
   color: var(--admin-muted);
   font-size: 13px;
 }
+
+.authMsg {
+  font-size: 13px;
+  color: var(--admin-muted);
+}
+
+.postBody {
+  margin-top: 16px;
+  border-top: 1px solid var(--admin-border);
+  padding-top: 12px;
+}
+.postBodyLabel {
+  font-size: 13px;
+  color: var(--admin-muted);
+  margin-bottom: 8px;
+}
+.postContent {
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+  margin: 0;
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 12px 14px;
+}

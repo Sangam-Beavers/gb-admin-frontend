@@ -25,6 +25,7 @@ import type {
   TransactionList,
   UserList,
   CommunityReportList,
+  AdminPostDetail,
   DocumentStats,
   DocumentRecentList,
   AuditLogList,
@@ -126,6 +127,9 @@ export const adminApi = {
 
   dismissReport: (postPublicId: string) =>
     apiClient.post<unknown, void>(`/admin/community/posts/${postPublicId}/dismiss`),
+
+  getPostDetail: (postPublicId: string) =>
+    apiClient.get<unknown, AdminPostDetail>(`/admin/community/posts/${postPublicId}`),
 
   // ── Document AI ─────────────────────────────────────────────
   getDocumentStats: () =>

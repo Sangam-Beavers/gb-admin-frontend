@@ -3,7 +3,7 @@ import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge from '@/components/common/Badge';
 import Modal from '@/components/common/Modal';
-import { useCommunityReports, useDeletePost, useDismissReport } from '@/hooks/useAdminQueries';
+import { useCommunityReports, useDeletePost, useDismissReport, usePostDetail } from '@/hooks/useAdminQueries';
 import { formatDateTime } from '@/utils/format';
 import type { AdminCommunityReport, ReportReason, ReportStatus } from '@/types/admin';
 import styles from './Community.module.css';
@@ -58,6 +58,7 @@ export default function Community() {
   const deletePost = useDeletePost();
   const dismissReport = useDismissReport();
   const [viewing, setViewing] = useState<AdminCommunityReport | null>(null);
+  const { data: postDetail, isLoading: detailLoading } = usePostDetail(viewing?.post_public_id ?? null);
 
   const rows = data?.reports ?? [];
 
@@ -128,9 +129,9 @@ export default function Community() {
             type="button"
             className={styles.del}
             onClick={() => onDelete(r.post_public_id)}
-            disabled={deletePost.isPending}
+            disabled={deletePost.isPending || r.status === 'RESOLVED_DELETED'}
           >
-            삭제
+            {r.status === 'RESOLVED_DELETED' ? '삭제됨' : deletePost.isPending ? '삭제 중…' : '삭제'}
           </button>
         </div>
       ),
@@ -208,6 +209,18 @@ export default function Community() {
               <strong>{formatDateTime(viewing.last_reported_at)}</strong>
             </li>
           </ul>
+        )}
+        {viewing && (
+          <div className={styles.postBody}>
+            <div className={styles.postBodyLabel}>게시글 본문</div>
+            {detailLoading ? (
+              <p className={styles.authMsg}>불러오는 중…</p>
+            ) : postDetail ? (
+              <p className={styles.postContent}>{postDetail.content}</p>
+            ) : (
+              <p className={styles.authMsg}>본문을 불러올 수 없습니다(삭제되었거나 접근 불가).</p>
+            )}
+          </div>
         )}
       </Modal>
     </div>

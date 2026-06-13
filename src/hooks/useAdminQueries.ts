@@ -15,6 +15,7 @@ import type {
   TransactionList,
   UserList,
   CommunityReportList,
+  AdminPostDetail,
   DocumentDashboardData,
   AuditLogList,
   FinancialAuditLogPage,
@@ -90,6 +91,15 @@ export function useInfraAlerts() {
  * 통합 경보 — 앱 레벨(스냅샷 계산) + 인프라(백엔드)를 합쳐 한 목록으로.
  * 헤더 뱃지·각 페이지 배너가 모두 이 훅 하나를 쓴다.
  */
+// 경보 출처 → 확인할 Grafana 대시보드(embeds name) 매핑.
+// 경보 출처 → 확인할 Grafana 대시보드. label은 Monitoring 임베드 제목과 동일하게 맞춘다.
+const SOURCE_TO_DASHBOARD: Record<string, { name: string; label: string }> = {
+  RDS: { name: 'rds', label: 'AWS RDS / Aurora' },
+  ELASTICACHE: { name: 'elasticache', label: 'AWS ElastiCache' },
+  SLO: { name: 'spring_boot', label: 'Spring Boot HTTP (APM)' },
+  APP: { name: 'spring_boot', label: 'Spring Boot HTTP (APM)' },
+};
+
 export function useAlerts(): { alerts: MonAlert[]; hasCritical: boolean } {
   const { data: snapshot } = useMonitoringSnapshot();
   const { data: infra } = useInfraAlerts();
@@ -99,7 +109,19 @@ export function useAlerts(): { alerts: MonAlert[]; hasCritical: boolean } {
     text: a.text,
     source: a.source,
   }));
-  const alerts = sortAlerts([...appAlerts, ...infraAlerts]);
+
+  // 경보별 "확인할 대시보드" 링크 부착 — embeds(grafana) name으로 URL 해석.
+  const byName: Record<string, string> = {};
+  (snapshot?.embeds.grafana ?? []).forEach((g) => {
+    byName[g.name] = g.url;
+  });
+  const withDashboard = (a: MonAlert): MonAlert => {
+    const d = a.source ? SOURCE_TO_DASHBOARD[a.source] : undefined;
+    const url = d ? byName[d.name] : undefined;
+    return url ? { ...a, dashboardUrl: url, dashboardLabel: d!.label } : a;
+  };
+
+  const alerts = sortAlerts([...appAlerts, ...infraAlerts]).map(withDashboard);
   return { alerts, hasCritical: alerts.some((a) => a.level === 'critical') };
 }
 
@@ -168,6 +190,15 @@ export function useDeletePost() {
       qc.invalidateQueries({ queryKey: ['admin', 'community'] });
       qc.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
     },
+  });
+}
+
+/** 신고된 게시글 본문 단건 — 모달이 열릴 때만 조회(postPublicId=null이면 비활성). */
+export function usePostDetail(postPublicId: string | null) {
+  return useQuery<AdminPostDetail>({
+    queryKey: ['admin', 'community', 'post', postPublicId],
+    queryFn: () => adminApi.getPostDetail(postPublicId!),
+    enabled: !!postPublicId,
   });
 }
 

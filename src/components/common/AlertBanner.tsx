@@ -36,7 +36,12 @@ export default function AlertBanner({ alerts, hideWhenOk = false }: AlertBannerP
           <li key={i} className={styles.item}>
             <span className={`${styles.dot} ${a.level === 'critical' ? styles.dotCritical : styles.dotWarning}`} />
             {a.source && <code className={styles.src}>{a.source}</code>}
-            {a.text}
+            <span className={styles.text}>{a.text}</span>
+            {a.dashboardLabel && (
+              <span className={styles.dash} title="이 경보는 이 Grafana 대시보드에서 확인">
+                📊 {a.dashboardLabel}
+              </span>
+            )}
           </li>
         ))}
       </ul>
