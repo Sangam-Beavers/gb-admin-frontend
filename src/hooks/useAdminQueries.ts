@@ -8,6 +8,7 @@ import type {
   DashboardSummary,
   DashboardAlerts,
   MonitoringSnapshot,
+  BusinessAnalyticsResponse,
   TransactionList,
   UserList,
   CommunityReportList,
@@ -51,6 +52,20 @@ export function useMonitoringSnapshot() {
     // 화면에 머물러 있어도 주기적으로 최신 헬스/SLO를 가져온다.
     refetchInterval: 30_000,
     staleTime: 0,
+  });
+}
+
+/**
+ * 비즈니스 분석(인구통계 + 매출/사용) — 모니터링 스냅샷과 분리된 독립 쿼리.
+ * 백엔드에 엔드포인트가 없거나(구버전) 실패해도 모니터링/설정 화면이 깨지지 않도록 분리한다.
+ */
+export function useBusinessAnalytics() {
+  return useQuery<BusinessAnalyticsResponse>({
+    queryKey: ['admin', 'monitoring', 'business-analytics'],
+    queryFn: () => adminApi.getBusinessAnalytics(),
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+    retry: 1,
   });
 }
 

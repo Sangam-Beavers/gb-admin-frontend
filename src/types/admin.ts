@@ -1,4 +1,4 @@
-// types/admin.ts — admin-service API contract (Phase 1, 실 API 연동)
+// types/admin.ts — admin-service API contract (실 API 연동)
 
 export interface PageMeta {
   page: number;
@@ -118,6 +118,34 @@ export interface ArgoCdEmbed {
 export interface EmbedsResponse {
   grafana: GrafanaEmbed[];
   argocd: ArgoCdEmbed;
+}
+
+// ── Business Analytics (인구통계 + 매출/사용) ──────────────────
+// 인프라 헬스와 분리된 비즈니스 카테고리. "어떤 사용자가 쓰는가 + 어디서 매출이 나는가".
+
+export interface AnalyticsBucket {
+  key: string; // enum 이름(MALE/TWENTIES 등) 또는 국적 ISO alpha-2
+  count: number;
+}
+
+export interface BusinessDemographics {
+  gender_distribution: AnalyticsBucket[];
+  age_distribution: AnalyticsBucket[];
+  nationality_distribution: AnalyticsBucket[];
+}
+
+export interface BusinessRevenue {
+  total_members: number;
+  new_members_today: number;
+  daily_active_users: number;
+  today_transactions_total: CurrencyAmounts; // 통화 → string 금액
+  transactions_by_action: AnalyticsBucket[];
+  exchange_fee_rate: string;
+}
+
+export interface BusinessAnalyticsResponse {
+  demographics: BusinessDemographics;
+  revenue: BusinessRevenue;
 }
 
 export interface MonitoringSnapshot {

@@ -85,13 +85,13 @@ export default function Dashboard() {
         <StatCard
           label={t('dashboard.dauLabel')}
           value={summary ? formatNumber(summary.daily_active_users) : '-'}
-          hint="전일 대비 — Phase 2"
+          hint="일간 활성 사용자"
           icon={<Users size={16} />}
         />
         <StatCard
           label={t('dashboard.docsLabel')}
           value={summary ? formatNumber(summary.today_documents_analyzed) : '-'}
-          hint="OCR 실패 6건"
+          hint={summary ? `분석 실패 ${formatNumber(summary.queues.analysis_failed)}건` : '-'}
           icon={<FileText size={16} />}
         />
         <StatCard

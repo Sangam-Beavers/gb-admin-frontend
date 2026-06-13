@@ -1,7 +1,7 @@
 /**
  * admin-service API 호출 래퍼.
  *
- * 백엔드 admin-service 의 실제 엔드포인트와 1:1 매칭한다(Phase 1 실 API 연동).
+ * 백엔드 admin-service 의 실제 엔드포인트와 1:1 매칭한다(실 API 연동).
  * client.ts 의 response interceptor 가 ApiResponse envelope({success,data,message})
  * 을 풀어 주므로 호출 측은 항상 `data` 만 받는다.
  *
@@ -20,6 +20,7 @@ import type {
   AuthFailuresResponse,
   ConfigResponse,
   EmbedsResponse,
+  BusinessAnalyticsResponse,
   TransactionList,
   UserList,
   CommunityReportList,
@@ -65,6 +66,9 @@ export const adminApi = {
   getConfig: () => apiClient.get<unknown, ConfigResponse>('/admin/monitoring/config'),
 
   getEmbeds: () => apiClient.get<unknown, EmbedsResponse>('/admin/monitoring/embeds'),
+
+  getBusinessAnalytics: () =>
+    apiClient.get<unknown, BusinessAnalyticsResponse>('/admin/monitoring/business-analytics'),
 
   // ── Transactions ────────────────────────────────────────────
   getTransactions: (params?: AdminQueryParams) =>

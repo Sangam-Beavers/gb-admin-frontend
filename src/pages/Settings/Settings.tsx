@@ -69,11 +69,6 @@ export default function Settings() {
     <div>
       <h2 className={styles.sectionTitle}>Settings</h2>
 
-      <div className={styles.notice}>
-        <strong>Phase 1 — read-only 미리보기.</strong>
-        <span>운영 설정값 편집 UI 및 관리자 권한 관리 기능은 Phase 2에서 구현 예정.</span>
-      </div>
-
       <h3 className={styles.sectionSub}>현재 운영 설정값</h3>
       <DataTable<AdminConfigEntry>
         columns={configCols}

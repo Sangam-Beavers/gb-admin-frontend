@@ -46,7 +46,10 @@
     "infraTitle": "Infra health",
     "grafanaTitle": "Grafana dashboards",
     "argocdTitle": "ArgoCD",
-    "embedPlaceholder": "Will activate after Phase 2 infra rollout."
+    "embedPlaceholder": "Dashboard is not reachable.",
+    "businessTitle": "Business analytics",
+    "demographics": "User demographics",
+    "revenue": "Revenue / usage"
   },
   "common": {
     "loading": "Loading…",

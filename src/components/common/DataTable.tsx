@@ -17,8 +17,7 @@ interface DataTableProps<T> {
 }
 
 /**
- * 가벼운 데이터 테이블. 정렬·페이지네이션은 Phase 2에서 추가.
- * Phase 1 데모 목적 (mock 데이터 렌더).
+ * 가벼운 데이터 테이블. 정렬·페이지네이션은 추후 추가.
  */
 export default function DataTable<T>({ columns, rows, rowKey, emptyText }: DataTableProps<T>) {
   return (
