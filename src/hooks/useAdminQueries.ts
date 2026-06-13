@@ -4,11 +4,14 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { adminApi, type AdminQueryParams } from '@/api/admin';
+import { computeAppAlerts, sortAlerts } from '@/utils/alerts';
 import type {
   DashboardSummary,
   DashboardAlerts,
   MonitoringSnapshot,
   BusinessAnalyticsResponse,
+  InfraAlertsResponse,
+  MonAlert,
   TransactionList,
   UserList,
   CommunityReportList,
@@ -67,6 +70,37 @@ export function useBusinessAnalytics() {
     staleTime: 30_000,
     retry: 1,
   });
+}
+
+/**
+ * 인프라 경보(RDS/ElastiCache 등) — admin-service가 Prometheus를 쿼리해 반환.
+ * 실패해도 화면이 안 깨지도록 독립 쿼리 + fail-soft(빈 배열).
+ */
+export function useInfraAlerts() {
+  return useQuery<InfraAlertsResponse>({
+    queryKey: ['admin', 'monitoring', 'infra-alerts'],
+    queryFn: () => adminApi.getInfraAlerts(),
+    refetchInterval: 30_000,
+    staleTime: 0,
+    retry: 1,
+  });
+}
+
+/**
+ * 통합 경보 — 앱 레벨(스냅샷 계산) + 인프라(백엔드)를 합쳐 한 목록으로.
+ * 헤더 뱃지·각 페이지 배너가 모두 이 훅 하나를 쓴다.
+ */
+export function useAlerts(): { alerts: MonAlert[]; hasCritical: boolean } {
+  const { data: snapshot } = useMonitoringSnapshot();
+  const { data: infra } = useInfraAlerts();
+  const appAlerts = computeAppAlerts(snapshot);
+  const infraAlerts: MonAlert[] = (infra?.alerts ?? []).map((a) => ({
+    level: a.level,
+    text: a.text,
+    source: a.source,
+  }));
+  const alerts = sortAlerts([...appAlerts, ...infraAlerts]);
+  return { alerts, hasCritical: alerts.some((a) => a.level === 'critical') };
 }
 
 export function useTransactions(params?: AdminQueryParams) {
@@ -130,6 +164,17 @@ export function useDeletePost() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (postPublicId: string) => adminApi.deletePost(postPublicId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin', 'community'] });
+      qc.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });
+    },
+  });
+}
+
+export function useDismissReport() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (postPublicId: string) => adminApi.dismissReport(postPublicId),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin', 'community'] });
       qc.invalidateQueries({ queryKey: ['admin', 'audit-logs'] });

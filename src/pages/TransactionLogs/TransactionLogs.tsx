@@ -5,7 +5,8 @@ import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge, { type BadgeTone } from '@/components/common/Badge';
 import Modal from '@/components/common/Modal';
-import { useTransactions, useTransactionAuditTrail } from '@/hooks/useAdminQueries';
+import AlertBanner from '@/components/common/AlertBanner';
+import { useTransactions, useTransactionAuditTrail, useAlerts } from '@/hooks/useAdminQueries';
 import { adminApi } from '@/api/admin';
 import {
   compareBalance,
@@ -79,6 +80,7 @@ export default function TransactionLogs() {
   const [downloading, setDownloading] = useState(false);
   const [trailTxId, setTrailTxId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { alerts } = useAlerts();
 
   const { data } = useTransactions({
     type: type !== 'ALL' ? type : undefined,
@@ -188,6 +190,7 @@ export default function TransactionLogs() {
 
   return (
     <div>
+      <AlertBanner alerts={alerts} hideWhenOk />
       <h2 className={styles.sectionTitle}>Transaction Logs</h2>
       <FilterBar
         actions={

@@ -17,7 +17,8 @@
       "financial": "Financial Ops",
       "userOps": "User Ops",
       "system": "System"
-    }
+    },
+    "analytics": "Analytics"
   },
   "auth": {
     "login": {

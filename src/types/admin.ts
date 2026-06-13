@@ -148,6 +148,25 @@ export interface BusinessAnalyticsResponse {
   revenue: BusinessRevenue;
 }
 
+// ── 경보(Alerts) ───────────────────────────────────────────────
+export type AlertLevel = 'critical' | 'warning';
+
+export interface MonAlert {
+  level: AlertLevel;
+  text: string;
+  source?: string; // APP | RDS | ELASTICACHE 등
+}
+
+export interface InfraAlertItem {
+  level: AlertLevel;
+  source: string;
+  text: string;
+}
+
+export interface InfraAlertsResponse {
+  alerts: InfraAlertItem[];
+}
+
 export interface MonitoringSnapshot {
   service_health: ServiceHealthResponse;
   domain_slo: DomainSloResponse;

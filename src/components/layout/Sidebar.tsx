@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard,
   Activity,
+  BarChart3,
   Receipt,
   Users as UsersIcon,
   MessageSquare,
@@ -41,6 +42,7 @@ const NAV_SECTIONS: NavSection[] = [
     items: [
       { to: ROUTES.DASHBOARD, labelKey: 'nav.dashboard', Icon: LayoutDashboard },
       { to: ROUTES.MONITORING, labelKey: 'nav.monitoring', Icon: Activity },
+      { to: ROUTES.ANALYTICS, labelKey: 'nav.analytics', Icon: BarChart3 },
     ],
   },
   {

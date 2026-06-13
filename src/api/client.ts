@@ -1,6 +1,5 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
-import { getAccessToken, clearLocalTokens } from '@/auth/tokenStore';
-import { ROUTES } from '@/constants/routes';
+import { getAccessToken } from '@/auth/tokenStore';
 
 /**
  * 백엔드 ApiResponse / ErrorResponse 형식 (gb-backend common-response 모듈 SSOT).
@@ -72,14 +71,7 @@ apiClient.interceptors.response.use(
     const status = err.response?.status ?? 0;
     const body = err.response?.data;
 
-    // 401 — 인증 만료/누락(AUTH4011). 로컬 토큰 정리 후 로그인 페이지로 강제 이동.
-    if (status === 401) {
-      clearLocalTokens();
-      if (window.location.pathname !== ROUTES.LOGIN) {
-        window.location.href = ROUTES.LOGIN;
-      }
-    }
-
+    // no-login 콘솔: 401이어도 로그인 페이지로 튕기지 않는다. 에러는 그대로 던져 호출 측(react-query)이 처리.
     if (body && typeof body === 'object' && body.success === false) {
       throw new ApiException(body.code, status, body.message);
     }

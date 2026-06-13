@@ -17,7 +17,8 @@
       "financial": "금융 운영",
       "userOps": "사용자 운영",
       "system": "시스템"
-    }
+    },
+    "analytics": "분석"
   },
   "auth": {
     "login": {

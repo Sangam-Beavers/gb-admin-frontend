@@ -3,7 +3,8 @@ import { CreditCard, RotateCcw } from 'lucide-react';
 import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge, { type BadgeTone } from '@/components/common/Badge';
-import { useChargeAttempts } from '@/hooks/useAdminQueries';
+import AlertBanner from '@/components/common/AlertBanner';
+import { useChargeAttempts, useAlerts } from '@/hooks/useAdminQueries';
 import { formatCurrency, formatDateTimeWithSeconds } from '@/utils/format';
 import type { ChargeAttempt, FinancialAuditStatus } from '@/types/admin';
 import styles from './ChargeAttempts.module.css';
@@ -47,6 +48,7 @@ export default function ChargeAttempts() {
   );
 
   const { data, isLoading, isError } = useChargeAttempts(params);
+  const { alerts } = useAlerts();
   const rows = data?.attempts ?? [];
 
   const onResetFilters = () => setFilters(INITIAL_FILTERS);
@@ -113,6 +115,7 @@ export default function ChargeAttempts() {
 
   return (
     <div>
+      <AlertBanner alerts={alerts} hideWhenOk />
       <div className={styles.headerBlock}>
         <h2 className={styles.sectionTitle}>
           <CreditCard size={20} className={styles.titleIcon} />

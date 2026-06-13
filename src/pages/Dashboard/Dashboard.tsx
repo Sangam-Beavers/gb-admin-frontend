@@ -3,7 +3,8 @@ import { ArrowUpRight, Users, FileText, AlertTriangle } from 'lucide-react';
 import StatCard from '@/components/common/StatCard';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge from '@/components/common/Badge';
-import { useDashboardSummary, useDashboardAlerts } from '@/hooks/useAdminQueries';
+import AlertBanner from '@/components/common/AlertBanner';
+import { useDashboardSummary, useDashboardAlerts, useAlerts } from '@/hooks/useAdminQueries';
 import { formatCurrency, formatNumber, formatDateTime } from '@/utils/format';
 import type { AdminAlert, AlertStatus } from '@/types/admin';
 import styles from './Dashboard.module.css';
@@ -25,6 +26,8 @@ export default function Dashboard() {
   const { t } = useTranslation();
   const { data: summary } = useDashboardSummary();
   const { data: alerts } = useDashboardAlerts();
+  const { alerts: monAlerts } = useAlerts();
+  const criticalAlerts = monAlerts.filter((a) => a.level === 'critical');
 
   const txTotalKRW = summary
     ? formatCurrency(summary.today_transactions_total.KRW, 'KRW')
@@ -69,6 +72,9 @@ export default function Dashboard() {
   return (
     <div>
       <h2 className={styles.sectionTitle}>{t('dashboard.title')}</h2>
+
+      {/* 위험(critical) 경보만 대시보드 상단으로 끌어올림 */}
+      <AlertBanner alerts={criticalAlerts} hideWhenOk />
 
       <div className={styles.statGrid}>
         <StatCard

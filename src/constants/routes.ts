@@ -8,6 +8,7 @@ export const ROUTES = {
   HOME: '/',
   DASHBOARD: '/dashboard',
   MONITORING: '/monitoring',
+  ANALYTICS: '/analytics',
 
   // 금융 운영
   TRANSACTIONS: '/transactions',

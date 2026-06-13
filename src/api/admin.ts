@@ -21,6 +21,7 @@ import type {
   ConfigResponse,
   EmbedsResponse,
   BusinessAnalyticsResponse,
+  InfraAlertsResponse,
   TransactionList,
   UserList,
   CommunityReportList,
@@ -69,6 +70,9 @@ export const adminApi = {
 
   getBusinessAnalytics: () =>
     apiClient.get<unknown, BusinessAnalyticsResponse>('/admin/monitoring/business-analytics'),
+
+  getInfraAlerts: () =>
+    apiClient.get<unknown, InfraAlertsResponse>('/admin/monitoring/infra-alerts'),
 
   // ── Transactions ────────────────────────────────────────────
   getTransactions: (params?: AdminQueryParams) =>
@@ -119,6 +123,9 @@ export const adminApi = {
 
   deletePost: (postPublicId: string) =>
     apiClient.delete<unknown, void>(`/admin/community/posts/${postPublicId}`),
+
+  dismissReport: (postPublicId: string) =>
+    apiClient.post<unknown, void>(`/admin/community/posts/${postPublicId}/dismiss`),
 
   // ── Document AI ─────────────────────────────────────────────
   getDocumentStats: () =>

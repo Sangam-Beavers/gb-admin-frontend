@@ -13,22 +13,37 @@
   gap: 6px;
 }
 
-.hide,
+.view,
+.dismiss,
 .del {
   border: none;
   border-radius: 6px;
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 600;
+  cursor: pointer;
 }
 
-.hide {
+.view {
   background: #fff;
   border: 1px solid var(--admin-border);
   color: var(--admin-text);
 }
-.hide:hover {
+.view:hover {
   background: #f1f5f9;
+}
+
+.dismiss {
+  background: #fff;
+  border: 1px solid var(--admin-border);
+  color: var(--admin-muted);
+}
+.dismiss:hover {
+  background: #f1f5f9;
+}
+.dismiss:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .del {
@@ -37,4 +52,28 @@
 }
 .del:hover {
   background: #dc2626;
+}
+.del:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.detailList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.detailList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+.detailList span {
+  color: var(--admin-muted);
+  font-size: 13px;
 }

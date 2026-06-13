@@ -2,7 +2,9 @@ import { useState } from 'react';
 import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge from '@/components/common/Badge';
-import { useCommunityReports, useHidePost, useDeletePost } from '@/hooks/useAdminQueries';
+import Modal from '@/components/common/Modal';
+import { useCommunityReports, useDeletePost, useDismissReport } from '@/hooks/useAdminQueries';
+import { formatDateTime } from '@/utils/format';
 import type { AdminCommunityReport, ReportReason, ReportStatus } from '@/types/admin';
 import styles from './Community.module.css';
 
@@ -53,18 +55,19 @@ export default function Community() {
     reason: reason !== 'ALL' ? reason : undefined,
     status: status !== 'ALL' ? status : undefined,
   });
-  const hidePost = useHidePost();
   const deletePost = useDeletePost();
+  const dismissReport = useDismissReport();
+  const [viewing, setViewing] = useState<AdminCommunityReport | null>(null);
 
   const rows = data?.reports ?? [];
 
-  const onHide = (postPublicId: string) => {
-    if (!confirm('이 게시글을 숨기시겠습니까?')) return;
-    hidePost.mutate(postPublicId);
-  };
   const onDelete = (postPublicId: string) => {
     if (!confirm('이 게시글을 삭제하시겠습니까? 되돌릴 수 없습니다.')) return;
     deletePost.mutate(postPublicId);
+  };
+  const onDismiss = (postPublicId: string) => {
+    if (!confirm('이 신고를 거부(기각)하시겠습니까? 게시글은 유지됩니다.')) return;
+    dismissReport.mutate(postPublicId);
   };
 
   const columns: ColumnDef<AdminCommunityReport>[] = [
@@ -106,17 +109,20 @@ export default function Community() {
     {
       key: 'actions',
       header: '관리',
-      width: '160px',
+      width: '240px',
       align: 'right',
       render: (r) => (
         <div className={styles.actions}>
+          <button type="button" className={styles.view} onClick={() => setViewing(r)}>
+            보기
+          </button>
           <button
             type="button"
-            className={styles.hide}
-            onClick={() => onHide(r.post_public_id)}
-            disabled={hidePost.isPending}
+            className={styles.dismiss}
+            onClick={() => onDismiss(r.post_public_id)}
+            disabled={dismissReport.isPending || r.status !== 'PENDING'}
           >
-            숨김
+            신고 거부
           </button>
           <button
             type="button"
@@ -169,6 +175,41 @@ export default function Community() {
         rowKey={(r) => r.post_public_id}
         emptyText="신고된 게시글이 없습니다."
       />
+
+      <Modal open={viewing !== null} onClose={() => setViewing(null)} title="신고 상세" maxWidth={560}>
+        {viewing && (
+          <ul className={styles.detailList}>
+            <li>
+              <span>게시글</span>
+              <strong>{viewing.title}</strong>
+            </li>
+            <li>
+              <span>작성자</span>
+              <strong>{viewing.author_nickname ?? viewing.author_public_id}</strong>
+            </li>
+            <li>
+              <span>유형</span>
+              <strong>{viewing.target_type}</strong>
+            </li>
+            <li>
+              <span>신고 사유</span>
+              <strong>{REASON_LABEL[viewing.reason] ?? viewing.reason}</strong>
+            </li>
+            <li>
+              <span>신고 수</span>
+              <strong>{viewing.report_count}</strong>
+            </li>
+            <li>
+              <span>상태</span>
+              <strong>{STATUS_LABEL[viewing.status] ?? viewing.status}</strong>
+            </li>
+            <li>
+              <span>최근 신고</span>
+              <strong>{formatDateTime(viewing.last_reported_at)}</strong>
+            </li>
+          </ul>
+        )}
+      </Modal>
     </div>
   );
 }
