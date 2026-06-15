@@ -1,0 +1,17 @@
+diff --git a/src/pages/Community/Community.tsx b/src/pages/Community/Community.tsx
+--- a/src/pages/Community/Community.tsx
++++ b/src/pages/Community/Community.tsx
+@@ -141,12 +141,6 @@ export default function Community() {
+   return (
+     <div>
+       <h2 className={styles.sectionTitle}>Community 신고 처리</h2>
+-      <FilterBar
+-        actions={
+-          <button type="button" className="primary" disabled>
+-            선택 삭제
+-          </button>
+-        }
+-      >
++      <FilterBar>
+         <select
+           value={reason}

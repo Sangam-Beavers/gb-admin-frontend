@@ -4,6 +4,7 @@ import { ShieldCheck, RotateCcw, ArrowRight } from 'lucide-react';
 import FilterBar from '@/components/common/FilterBar';
 import { type ColumnDef } from '@/components/common/DataTable';
 import Badge, { type BadgeTone } from '@/components/common/Badge';
+import Pagination from '@/components/common/Pagination';
 import { useFinancialAuditLogs } from '@/hooks/useAdminQueries';
 import {
   formatBalance,
@@ -74,7 +75,14 @@ const INITIAL_FILTERS = {
 
 export default function FinancialAuditLog() {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
+  const [page, setPage] = useState(0);
   const navigate = useNavigate();
+
+  // 필터가 바뀌면 항상 첫 페이지로 돌아간다.
+  const updateFilters = (fn: (f: typeof INITIAL_FILTERS) => typeof INITIAL_FILTERS) => {
+    setFilters(fn);
+    setPage(0);
+  };
 
   const params = useMemo(() => {
     return {
@@ -86,13 +94,17 @@ export default function FinancialAuditLog() {
       ip_address: filters.ip_address || undefined,
       min_amount: filters.min_amount || undefined,
       max_amount: filters.max_amount || undefined,
+      page,
     };
-  }, [filters]);
+  }, [filters, page]);
 
   const { data, isLoading, isError } = useFinancialAuditLogs(params);
   const rows = data?.logs ?? [];
 
-  const onResetFilters = () => setFilters(INITIAL_FILTERS);
+  const onResetFilters = () => {
+    setFilters(INITIAL_FILTERS);
+    setPage(0);
+  };
 
   const onCsvDownload = () => {
     // 현재 admin-service 에 financial-audit-logs CSV 엔드포인트는 별도 추가 예정.
@@ -165,9 +177,7 @@ export default function FinancialAuditLog() {
             {r.user_nickname ?? '(닉네임 없음)'}
             {r.user_email && <span className={styles.email}> · {r.user_email}</span>}
           </div>
-          <div className={styles.mono + ' ' + styles.subtle}>
-            {r.user_public_id.slice(0, 8)}…
-          </div>
+          <div className={styles.mono + ' ' + styles.subtle}>{r.user_public_id.slice(0, 8)}…</div>
         </div>
       ),
     },
@@ -199,11 +209,7 @@ export default function FinancialAuditLog() {
       render: (r) => {
         const dir = compareBalance(r.before_balance, r.after_balance);
         const cls =
-          dir === 'increase'
-            ? styles.increase
-            : dir === 'decrease'
-              ? styles.decrease
-              : styles.same;
+          dir === 'increase' ? styles.increase : dir === 'decrease' ? styles.decrease : styles.same;
         return (
           <span className={`${styles.balanceCell} ${cls}`}>
             <span className={styles.before}>{formatBalance(r.before_balance)}</span>
@@ -223,9 +229,7 @@ export default function FinancialAuditLog() {
       key: 'ip',
       header: 'IP',
       width: '140px',
-      render: (r) => (
-        <span className={styles.mono}>{r.ip_address ?? '-'}</span>
-      ),
+      render: (r) => <span className={styles.mono}>{r.ip_address ?? '-'}</span>,
     },
   ];
 
@@ -243,8 +247,8 @@ export default function FinancialAuditLog() {
           Financial Audit Log
         </h2>
         <p className={styles.lede}>
-          모든 잔액 변동의 append-only 기록 — 부정거래·고객분쟁 조사용.
-          행을 클릭하면 해당 거래의 audit trail 로 이동합니다.
+          모든 잔액 변동의 append-only 기록 — 부정거래·고객분쟁 조사용. 행을 클릭하면 해당 거래의
+          audit trail 로 이동합니다.
         </p>
       </div>
 
@@ -264,12 +268,12 @@ export default function FinancialAuditLog() {
         <input
           placeholder="사용자 public_id 검색"
           value={filters.user_public_id}
-          onChange={(e) => setFilters((f) => ({ ...f, user_public_id: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, user_public_id: e.target.value }))}
         />
         <select
           value={filters.action}
           onChange={(e) =>
-            setFilters((f) => ({
+            updateFilters((f) => ({
               ...f,
               action: e.target.value as 'ALL' | FinancialAuditAction,
             }))
@@ -284,7 +288,7 @@ export default function FinancialAuditLog() {
         <select
           value={filters.status}
           onChange={(e) =>
-            setFilters((f) => ({
+            updateFilters((f) => ({
               ...f,
               status: e.target.value as 'ALL' | FinancialAuditStatus,
             }))
@@ -299,30 +303,30 @@ export default function FinancialAuditLog() {
         <input
           type="date"
           value={filters.from}
-          onChange={(e) => setFilters((f) => ({ ...f, from: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, from: e.target.value }))}
           title="시작일"
         />
         <input
           type="date"
           value={filters.to}
-          onChange={(e) => setFilters((f) => ({ ...f, to: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, to: e.target.value }))}
           title="종료일"
         />
         <input
           placeholder="IP"
           value={filters.ip_address}
-          onChange={(e) => setFilters((f) => ({ ...f, ip_address: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, ip_address: e.target.value }))}
         />
         <input
           placeholder="최소 금액"
           value={filters.min_amount}
-          onChange={(e) => setFilters((f) => ({ ...f, min_amount: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, min_amount: e.target.value }))}
           inputMode="numeric"
         />
         <input
           placeholder="최대 금액"
           value={filters.max_amount}
-          onChange={(e) => setFilters((f) => ({ ...f, max_amount: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, max_amount: e.target.value }))}
           inputMode="numeric"
         />
       </FilterBar>
@@ -338,10 +342,12 @@ export default function FinancialAuditLog() {
         />
       </div>
 
-      <div className={styles.meta}>
-        총 {data?.total_elements ?? 0} 건 · 페이지 {(data?.page ?? 0) + 1} /{' '}
-        {data?.total_pages ?? 1}
-      </div>
+      <Pagination
+        page={data?.page ?? 0}
+        totalPages={data?.total_pages ?? 1}
+        totalElements={data?.total_elements ?? 0}
+        onPageChange={setPage}
+      />
     </div>
   );
 }
