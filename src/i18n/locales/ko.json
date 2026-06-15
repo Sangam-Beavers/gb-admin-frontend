@@ -18,7 +18,8 @@
       "userOps": "사용자 운영",
       "system": "시스템"
     },
-    "analytics": "분석"
+    "analytics": "분석",
+    "revenue": "수익"
   },
   "auth": {
     "login": {
@@ -51,6 +52,27 @@
     "businessTitle": "비즈니스 분석",
     "demographics": "사용자 인구통계",
     "revenue": "매출 / 사용"
+  },
+  "revenue": {
+    "title": "수익 현황",
+    "subtitle": "앱이 수수료·구독으로 번 수익",
+    "demoNote": "수익 엔드포인트(/admin/monitoring/revenue)에 연결할 수 없어 데모(mock) 데이터를 표시합니다.",
+    "totalFee": "수수료 수익 총합",
+    "totalFeeHint": "환전 + 송금 누적",
+    "exchangeFee": "환전 수수료",
+    "remittanceFee": "송금 수수료",
+    "cumulative": "누적",
+    "thisMonth": "이번 달",
+    "subscriptionRevenue": "문서분석 월 예상 수익",
+    "subscribers": "문서분석 구독자",
+    "subscribersHint": "활성 구독",
+    "perSubscriber": "1인당 월 구독료",
+    "newThisMonth": "이번 달 신규",
+    "churnedThisMonth": "이번 달 이탈",
+    "trendTitle": "월별 수익 추이",
+    "byCurrencyTitle": "통화별 수수료 수익",
+    "subscriptionTitle": "문서분석 구독",
+    "expectedMonthly": "월 예상 수익"
   },
   "common": {
     "loading": "불러오는 중…",

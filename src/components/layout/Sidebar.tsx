@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Activity,
   BarChart3,
+  Wallet,
   Receipt,
   Users as UsersIcon,
   MessageSquare,
@@ -43,6 +44,7 @@ const NAV_SECTIONS: NavSection[] = [
       { to: ROUTES.DASHBOARD, labelKey: 'nav.dashboard', Icon: LayoutDashboard },
       { to: ROUTES.MONITORING, labelKey: 'nav.monitoring', Icon: Activity },
       { to: ROUTES.ANALYTICS, labelKey: 'nav.analytics', Icon: BarChart3 },
+      { to: ROUTES.REVENUE, labelKey: 'nav.revenue', Icon: Wallet },
     ],
   },
   {
@@ -86,9 +88,7 @@ export default function Sidebar() {
       <nav className={styles.nav}>
         {NAV_SECTIONS.map((section, sIdx) => (
           <div key={sIdx} className={styles.section}>
-            {section.labelKey && (
-              <div className={styles.sectionHeader}>{t(section.labelKey)}</div>
-            )}
+            {section.labelKey && <div className={styles.sectionHeader}>{t(section.labelKey)}</div>}
             {section.items.map(({ to, labelKey, Icon }) => (
               <NavLink
                 key={to}

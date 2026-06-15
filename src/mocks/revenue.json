@@ -1,0 +1,33 @@
+{
+  "fee_revenue": {
+    "currency_code": "KRW",
+    "total_exchange_fee": "18430000",
+    "total_remittance_fee": "9720000",
+    "total_fee_revenue": "28150000",
+    "this_month_exchange_fee": "3210000",
+    "this_month_remittance_fee": "1840000",
+    "by_currency": [
+      { "currency_code": "USD", "exchange_fee": "7650000", "remittance_fee": "4120000" },
+      { "currency_code": "VND", "exchange_fee": "5210000", "remittance_fee": "3080000" },
+      { "currency_code": "CNY", "exchange_fee": "3380000", "remittance_fee": "1640000" },
+      { "currency_code": "PHP", "exchange_fee": "1290000", "remittance_fee": "560000" },
+      { "currency_code": "NPR", "exchange_fee": "900000", "remittance_fee": "320000" }
+    ]
+  },
+  "document_subscription": {
+    "currency_code": "KRW",
+    "active_subscribers": 30,
+    "monthly_price": "4900",
+    "expected_monthly_revenue": "147000",
+    "new_subscribers_this_month": 5,
+    "churned_this_month": 2
+  },
+  "monthly_trend": [
+    { "month": "2026-01", "exchange_fee": 2100000, "remittance_fee": 1200000 },
+    { "month": "2026-02", "exchange_fee": 2450000, "remittance_fee": 1350000 },
+    { "month": "2026-03", "exchange_fee": 2780000, "remittance_fee": 1510000 },
+    { "month": "2026-04", "exchange_fee": 3020000, "remittance_fee": 1640000 },
+    { "month": "2026-05", "exchange_fee": 3260000, "remittance_fee": 1760000 },
+    { "month": "2026-06", "exchange_fee": 3210000, "remittance_fee": 1840000 }
+  ]
+}

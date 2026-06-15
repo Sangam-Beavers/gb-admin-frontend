@@ -21,6 +21,7 @@ import type {
   ConfigResponse,
   EmbedsResponse,
   BusinessAnalyticsResponse,
+  RevenueApiResponse,
   InfraAlertsResponse,
   TransactionList,
   UserList,
@@ -47,18 +48,15 @@ function toParams(p?: AdminQueryParams): Record<string, string | number> | undef
 
 export const adminApi = {
   // ── Dashboard ───────────────────────────────────────────────
-  getDashboardSummary: () =>
-    apiClient.get<unknown, DashboardSummary>('/admin/dashboard/summary'),
+  getDashboardSummary: () => apiClient.get<unknown, DashboardSummary>('/admin/dashboard/summary'),
 
-  getDashboardAlerts: () =>
-    apiClient.get<unknown, DashboardAlerts>('/admin/dashboard/alerts'),
+  getDashboardAlerts: () => apiClient.get<unknown, DashboardAlerts>('/admin/dashboard/alerts'),
 
   // ── Monitoring (6 개별 endpoint) ────────────────────────────
   getServiceHealth: () =>
     apiClient.get<unknown, ServiceHealthResponse>('/admin/monitoring/service-health'),
 
-  getDomainSlo: () =>
-    apiClient.get<unknown, DomainSloResponse>('/admin/monitoring/domain-slo'),
+  getDomainSlo: () => apiClient.get<unknown, DomainSloResponse>('/admin/monitoring/domain-slo'),
 
   getQueues: () => apiClient.get<unknown, QueuesResponse>('/admin/monitoring/queues'),
 
@@ -71,6 +69,9 @@ export const adminApi = {
 
   getBusinessAnalytics: () =>
     apiClient.get<unknown, BusinessAnalyticsResponse>('/admin/monitoring/business-analytics'),
+
+  // ── Revenue (앱이 번 수익: 환전/송금 수수료 — wallet 실데이터) ──
+  getRevenue: () => apiClient.get<unknown, RevenueApiResponse>('/admin/monitoring/revenue'),
 
   getInfraAlerts: () =>
     apiClient.get<unknown, InfraAlertsResponse>('/admin/monitoring/infra-alerts'),
@@ -132,8 +133,7 @@ export const adminApi = {
     apiClient.get<unknown, AdminPostDetail>(`/admin/community/posts/${postPublicId}`),
 
   // ── Document AI ─────────────────────────────────────────────
-  getDocumentStats: () =>
-    apiClient.get<unknown, DocumentStats>('/admin/documents/stats'),
+  getDocumentStats: () => apiClient.get<unknown, DocumentStats>('/admin/documents/stats'),
 
   getRecentDocuments: (params?: AdminQueryParams) =>
     apiClient.get<unknown, DocumentRecentList>('/admin/documents/recent', {
@@ -152,9 +152,7 @@ export const adminApi = {
 
   // ── Transaction audit trail (드릴다운) ──────────────────────
   getTransactionAuditTrail: (publicId: string) =>
-    apiClient.get<unknown, TransactionAuditTrail>(
-      `/admin/transactions/${publicId}/audit-logs`
-    ),
+    apiClient.get<unknown, TransactionAuditTrail>(`/admin/transactions/${publicId}/audit-logs`),
 
   // ── Charge Attempts (충전 시도, 기본 FAILED 필터) ────────────
   getChargeAttempts: (params?: AdminQueryParams) =>
