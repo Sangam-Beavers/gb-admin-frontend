@@ -154,6 +154,9 @@ export function useAlerts(): { alerts: MonAlert[]; hasCritical: boolean } {
     source: a.source,
   }));
 
+  // ⚠️ DEMO 임시 — 영상 촬영용 RDS CPU 경보 1건 하드코딩. 촬영 후 이 한 줄 삭제할 것.
+  infraAlerts.unshift({ level: 'critical', source: 'RDS', text: 'RDS CPU 사용률 높음' });
+
   // 경보별 "확인할 대시보드" 링크 부착 — embeds(grafana) name으로 URL 해석.
   const byName: Record<string, string> = {};
   (snapshot?.embeds.grafana ?? []).forEach((g) => {
