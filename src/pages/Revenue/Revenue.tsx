@@ -22,10 +22,16 @@ import styles from './Revenue.module.css';
 const EXCHANGE_COLOR = '#6366F1';
 const REMITTANCE_COLOR = '#10B981';
 
-/** "2026-06" → "6월" (추이 차트 X축용). */
-function monthLabel(ym: string): string {
-  const m = Number(ym.slice(5, 7));
-  return Number.isNaN(m) ? ym : `${m}월`;
+/**
+ * 추이 차트 X축 라벨. 백엔드가 주 시작일("2026-06-09")을 보내면 "6/9",
+ * 구형 월 포맷("2026-06")이면 "6월"로 표시(혼용 안전).
+ */
+function trendLabel(s: string): string {
+  const parts = String(s).split('-');
+  const mo = Number(parts[1]);
+  const day = Number(parts[2]);
+  if (Number.isNaN(mo)) return s;
+  return Number.isNaN(day) ? `${mo}월` : `${mo}/${day}`;
 }
 
 export default function Revenue() {
@@ -43,7 +49,7 @@ export default function Revenue() {
   const sub = rev.document_subscription;
   const cur = fee.currency_code;
 
-  const trend = rev.monthly_trend.map((p) => ({ ...p, label: monthLabel(p.month) }));
+  const trend = rev.monthly_trend.map((p) => ({ ...p, label: trendLabel(p.month) }));
   const byCurrency = fee.by_currency.map((c) => ({
     ...c,
     exchange: Number(c.exchange_fee),

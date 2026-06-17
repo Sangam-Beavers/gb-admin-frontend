@@ -69,7 +69,7 @@
     "perSubscriber": "Monthly price / subscriber",
     "newThisMonth": "New this month",
     "churnedThisMonth": "Churned this month",
-    "trendTitle": "Monthly revenue trend",
+    "trendTitle": "Weekly revenue trend",
     "byCurrencyTitle": "Fee revenue by currency",
     "subscriptionTitle": "Doc AI subscription",
     "expectedMonthly": "Expected monthly revenue"

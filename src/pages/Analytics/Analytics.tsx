@@ -40,10 +40,13 @@ const NATIONALITY_LABEL: Record<string, string> = {
   LK: '스리랑카',
   BD: '방글라데시',
   KR: '한국',
+  US: '미국',
+  ETC: '기타',
 };
 const ACTION_LABEL: Record<string, string> = {
   CHARGE: '충전',
-  TRANSFER: '내부 송금',
+  TRANSFER: '회원간 송금',
+  INTERNAL_TRANSFER: '회원간 송금', // 백엔드 거래 타입 값(INTERNAL_TRANSFER)이 raw로 뜨던 것 매핑
   REMITTANCE: '해외 송금',
   EXCHANGE: '환전',
   PAYOUT: '현금화',
