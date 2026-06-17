@@ -10,7 +10,9 @@ import type {
   DashboardAlerts,
   MonitoringSnapshot,
   BusinessAnalyticsResponse,
+  RevenueSummary,
   InfraAlertsResponse,
+  DocumentSubscription,
   MonAlert,
   TransactionList,
   UserList,
@@ -41,15 +43,16 @@ export function useMonitoringSnapshot() {
   return useQuery<MonitoringSnapshot>({
     queryKey: ['admin', 'monitoring', 'snapshot'],
     queryFn: async () => {
-      const [service_health, domain_slo, queues, auth_failures, config, embeds] =
-        await Promise.all([
+      const [service_health, domain_slo, queues, auth_failures, config, embeds] = await Promise.all(
+        [
           adminApi.getServiceHealth(),
           adminApi.getDomainSlo(),
           adminApi.getQueues(),
           adminApi.getAuthFailures(),
           adminApi.getConfig(),
           adminApi.getEmbeds(),
-        ]);
+        ]
+      );
       return { service_health, domain_slo, queues, auth_failures, config, embeds };
     },
     // 모니터링 화면은 30초마다 자동 갱신. staleTime(전역 30s)을 0으로 덮어써
@@ -72,6 +75,47 @@ export function useBusinessAnalytics() {
     retry: 1,
   });
 }
+
+/**
+ * Revenue(앱이 번 수익) view model.
+ *
+ * - 환전/송금 수수료 = 백엔드 `/admin/monitoring/revenue` 실데이터(wallet COMPLETED 거래 fee 집계).
+ * - 문서분석 구독 = 별도 도메인(미구현)이라 mock 으로 합성한다.
+ *
+ * 독립 쿼리 + 페이지 측 mock fail-soft 로, 백엔드가 죽어도 화면이 깨지지 않는다.
+ */
+export function useRevenue() {
+  return useQuery<RevenueSummary>({
+    queryKey: ['admin', 'monitoring', 'revenue'],
+    queryFn: async () => {
+      const api = await adminApi.getRevenue();
+      return {
+        fee_revenue: api.fee_revenue,
+        // 문서분석 구독은 백엔드에 없으므로 mock 으로 채운다(요구사항: 구독만 mock).
+        document_subscription: DOCUMENT_SUBSCRIPTION_MOCK,
+        // 차트는 number 가 필요하므로 string 금액을 변환.
+        monthly_trend: api.monthly_trend.map((m) => ({
+          month: m.month,
+          exchange_fee: Number(m.exchange_fee),
+          remittance_fee: Number(m.remittance_fee),
+        })),
+      };
+    },
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+    retry: 1,
+  });
+}
+
+/** 문서분석 구독 mock(별도 도메인 미구현). 활성 구독자 ~30명 기준. */
+export const DOCUMENT_SUBSCRIPTION_MOCK: DocumentSubscription = {
+  currency_code: 'KRW',
+  active_subscribers: 30,
+  monthly_price: '4900',
+  expected_monthly_revenue: '147000',
+  new_subscribers_this_month: 5,
+  churned_this_month: 2,
+};
 
 /**
  * 인프라 경보(RDS/ElastiCache 등) — admin-service가 Prometheus를 쿼리해 반환.

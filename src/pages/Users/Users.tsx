@@ -2,6 +2,7 @@ import { useState } from 'react';
 import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge from '@/components/common/Badge';
+import Pagination from '@/components/common/Pagination';
 import { useUsers } from '@/hooks/useAdminQueries';
 import { formatDateTime } from '@/utils/format';
 import type { AdminUser, KycStatus } from '@/types/admin';
@@ -39,9 +40,11 @@ function kycTone(s: KycStatus) {
 export default function Users() {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<'ALL' | KycStatus>('ALL');
+  const [page, setPage] = useState(0);
   const { data } = useUsers({
     q: search || undefined,
     kyc_status: status !== 'ALL' ? status : undefined,
+    page,
   });
   const rows = data?.members ?? [];
 
@@ -86,9 +89,18 @@ export default function Users() {
         <input
           placeholder="이메일·이름·닉네임 검색"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(0);
+          }}
         />
-        <select value={status} onChange={(e) => setStatus(e.target.value as 'ALL' | KycStatus)}>
+        <select
+          value={status}
+          onChange={(e) => {
+            setStatus(e.target.value as 'ALL' | KycStatus);
+            setPage(0);
+          }}
+        >
           <option value="ALL">전체 상태</option>
           <option value="PENDING">대기</option>
           <option value="NEEDS_REVIEW">확인필요</option>
@@ -103,6 +115,13 @@ export default function Users() {
         rows={rows}
         rowKey={(r) => r.user_public_id}
         emptyText="조회된 사용자가 없습니다."
+      />
+
+      <Pagination
+        page={data?.page ?? 0}
+        totalPages={data?.total_pages ?? 1}
+        totalElements={data?.total_elements ?? 0}
+        onPageChange={setPage}
       />
     </div>
   );

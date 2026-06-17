@@ -18,7 +18,8 @@
       "userOps": "User Ops",
       "system": "System"
     },
-    "analytics": "Analytics"
+    "analytics": "Analytics",
+    "revenue": "Revenue"
   },
   "auth": {
     "login": {
@@ -51,6 +52,27 @@
     "businessTitle": "Business analytics",
     "demographics": "User demographics",
     "revenue": "Revenue / usage"
+  },
+  "revenue": {
+    "title": "Revenue overview",
+    "subtitle": "What the app earned from fees & subscriptions",
+    "demoNote": "Revenue endpoint (/admin/monitoring/revenue) is unreachable — showing demo (mock) data.",
+    "totalFee": "Total fee revenue",
+    "totalFeeHint": "Exchange + remittance, cumulative",
+    "exchangeFee": "Exchange fees",
+    "remittanceFee": "Remittance fees",
+    "cumulative": "Cumulative",
+    "thisMonth": "This month",
+    "subscriptionRevenue": "Doc AI expected monthly revenue",
+    "subscribers": "Doc AI subscribers",
+    "subscribersHint": "Active subscriptions",
+    "perSubscriber": "Monthly price / subscriber",
+    "newThisMonth": "New this month",
+    "churnedThisMonth": "Churned this month",
+    "trendTitle": "Monthly revenue trend",
+    "byCurrencyTitle": "Fee revenue by currency",
+    "subscriptionTitle": "Doc AI subscription",
+    "expectedMonthly": "Expected monthly revenue"
   },
   "common": {
     "loading": "Loading…",

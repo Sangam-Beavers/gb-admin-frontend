@@ -148,6 +148,64 @@ export interface BusinessAnalyticsResponse {
   revenue: BusinessRevenue;
 }
 
+// ── Revenue (앱이 번 수익) ─────────────────────────────────────
+// "우리 앱이 얼마를 벌었나" 한 화면. 수수료(환전+송금) 매출 + 문서분석 구독 매출.
+// 금액은 백엔드 컨벤션대로 string(BigDecimal). 기준 통화는 currency_code(KRW).
+
+export interface FeeRevenueByCurrency {
+  currency_code: string; // 거래 통화(USD/VND/CNY …)
+  exchange_fee: string; // 해당 통화 환전에서 번 수수료(기준통화 환산)
+  remittance_fee: string; // 해당 통화 송금에서 번 수수료(기준통화 환산)
+}
+
+export interface FeeRevenue {
+  currency_code: string; // 기준 통화(KRW)
+  total_exchange_fee: string; // 누적 환전 수수료 수익
+  total_remittance_fee: string; // 누적 송금 수수료 수익
+  total_fee_revenue: string; // 둘의 합(앱이 수수료로 번 돈 총합)
+  this_month_exchange_fee: string;
+  this_month_remittance_fee: string;
+  by_currency: FeeRevenueByCurrency[];
+}
+
+export interface DocumentSubscription {
+  currency_code: string;
+  active_subscribers: number; // 현재 활성 구독자 수
+  monthly_price: string; // 1인당 월 구독료
+  expected_monthly_revenue: string; // active_subscribers × monthly_price
+  new_subscribers_this_month: number;
+  churned_this_month: number;
+}
+
+export interface RevenueTrendPoint {
+  month: string; // "2026-06"
+  exchange_fee: number;
+  remittance_fee: number;
+}
+
+/**
+ * 백엔드 `/admin/monitoring/revenue` 응답(실데이터) — 환전/송금 수수료만.
+ * 금액은 백엔드 규약대로 string. 문서분석 구독은 별도 도메인(미구현)이라 응답에 없고
+ * 프론트가 mock 으로 채운다([[document_subscription]]은 view model 에서 합성).
+ */
+export interface RevenueApiMonthlyFee {
+  month: string; // "2026-06"
+  exchange_fee: string;
+  remittance_fee: string;
+}
+
+export interface RevenueApiResponse {
+  fee_revenue: FeeRevenue;
+  monthly_trend: RevenueApiMonthlyFee[];
+}
+
+/** 화면 view model — 실데이터(수수료) + mock(문서분석 구독)을 합성한 형태. */
+export interface RevenueSummary {
+  fee_revenue: FeeRevenue;
+  document_subscription: DocumentSubscription;
+  monthly_trend: RevenueTrendPoint[];
+}
+
 // ── 경보(Alerts) ───────────────────────────────────────────────
 export type AlertLevel = 'critical' | 'warning';
 
@@ -290,12 +348,7 @@ export interface AuditLogList extends PageMeta {
 // ── Financial Audit Log (append-only 잔액 변동 기록) ────────────
 // 부정거래·고객분쟁 조사용. 모든 잔액 변동이 한 줄씩 적힌다.
 
-export type FinancialAuditAction =
-  | 'CHARGE'
-  | 'TRANSFER'
-  | 'REMITTANCE'
-  | 'EXCHANGE'
-  | 'CANCEL';
+export type FinancialAuditAction = 'CHARGE' | 'TRANSFER' | 'REMITTANCE' | 'EXCHANGE' | 'CANCEL';
 
 export type FinancialAuditStatus = 'SUCCESS' | 'FAILED' | 'PENDING';
 

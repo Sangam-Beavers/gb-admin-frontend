@@ -4,6 +4,7 @@ import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge, { type BadgeTone } from '@/components/common/Badge';
 import AlertBanner from '@/components/common/AlertBanner';
+import Pagination from '@/components/common/Pagination';
 import { useChargeAttempts, useAlerts } from '@/hooks/useAdminQueries';
 import { formatCurrency, formatDateTimeWithSeconds } from '@/utils/format';
 import type { ChargeAttempt, FinancialAuditStatus } from '@/types/admin';
@@ -36,6 +37,13 @@ const INITIAL_FILTERS = {
 
 export default function ChargeAttempts() {
   const [filters, setFilters] = useState(INITIAL_FILTERS);
+  const [page, setPage] = useState(0);
+
+  // 필터가 바뀌면 항상 첫 페이지로 돌아간다.
+  const updateFilters = (fn: (f: typeof INITIAL_FILTERS) => typeof INITIAL_FILTERS) => {
+    setFilters(fn);
+    setPage(0);
+  };
 
   const params = useMemo(
     () => ({
@@ -43,24 +51,26 @@ export default function ChargeAttempts() {
       user_public_id: filters.user_public_id || undefined,
       from: filters.from || undefined,
       to: filters.to || undefined,
+      page,
     }),
-    [filters]
+    [filters, page]
   );
 
   const { data, isLoading, isError } = useChargeAttempts(params);
   const { alerts } = useAlerts();
   const rows = data?.attempts ?? [];
 
-  const onResetFilters = () => setFilters(INITIAL_FILTERS);
+  const onResetFilters = () => {
+    setFilters(INITIAL_FILTERS);
+    setPage(0);
+  };
 
   const columns: ColumnDef<ChargeAttempt>[] = [
     {
       key: 'time',
       header: '시각',
       width: '150px',
-      render: (r) => (
-        <span className={styles.mono}>{formatDateTimeWithSeconds(r.created_at)}</span>
-      ),
+      render: (r) => <span className={styles.mono}>{formatDateTimeWithSeconds(r.created_at)}</span>,
     },
     {
       key: 'user',
@@ -68,9 +78,7 @@ export default function ChargeAttempts() {
       render: (r) => (
         <div>
           <div>{r.user_nickname ?? '(닉네임 없음)'}</div>
-          <div className={`${styles.subtle} ${styles.mono}`}>
-            {r.user_public_id.slice(0, 8)}…
-          </div>
+          <div className={`${styles.subtle} ${styles.mono}`}>{r.user_public_id.slice(0, 8)}…</div>
         </div>
       ),
     },
@@ -122,8 +130,8 @@ export default function ChargeAttempts() {
           Charge Attempts
         </h2>
         <p className={styles.lede}>
-          외부 은행에 보낸 충전 시도 — 기본은 <strong>실패한 충전</strong> 만 표시.
-          은행 측 오류·잔액 부족·인증 실패 등 운영 모니터링용.
+          외부 은행에 보낸 충전 시도 — 기본은 <strong>실패한 충전</strong> 만 표시. 은행 측
+          오류·잔액 부족·인증 실패 등 운영 모니터링용.
         </p>
       </div>
 
@@ -138,7 +146,7 @@ export default function ChargeAttempts() {
         <select
           value={filters.status}
           onChange={(e) =>
-            setFilters((f) => ({
+            updateFilters((f) => ({
               ...f,
               status: e.target.value as 'ALL' | FinancialAuditStatus,
             }))
@@ -153,18 +161,18 @@ export default function ChargeAttempts() {
         <input
           placeholder="사용자 public_id"
           value={filters.user_public_id}
-          onChange={(e) => setFilters((f) => ({ ...f, user_public_id: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, user_public_id: e.target.value }))}
         />
         <input
           type="date"
           value={filters.from}
-          onChange={(e) => setFilters((f) => ({ ...f, from: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, from: e.target.value }))}
           title="시작일"
         />
         <input
           type="date"
           value={filters.to}
-          onChange={(e) => setFilters((f) => ({ ...f, to: e.target.value }))}
+          onChange={(e) => updateFilters((f) => ({ ...f, to: e.target.value }))}
           title="종료일"
         />
       </FilterBar>
@@ -176,10 +184,12 @@ export default function ChargeAttempts() {
         emptyText={emptyText}
       />
 
-      <div className={styles.meta}>
-        총 {data?.total_elements ?? 0} 건 · 페이지 {(data?.page ?? 0) + 1} /{' '}
-        {data?.total_pages ?? 1}
-      </div>
+      <Pagination
+        page={data?.page ?? 0}
+        totalPages={data?.total_pages ?? 1}
+        totalElements={data?.total_elements ?? 0}
+        onPageChange={setPage}
+      />
     </div>
   );
 }

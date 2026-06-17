@@ -9,6 +9,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   MONITORING: '/monitoring',
   ANALYTICS: '/analytics',
+  REVENUE: '/revenue',
 
   // 금융 운영
   TRANSACTIONS: '/transactions',

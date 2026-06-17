@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   Activity,
   BarChart3,
+  Wallet,
   Receipt,
   Users as UsersIcon,
   MessageSquare,
@@ -32,7 +33,7 @@ interface NavSection {
 /**
  * 사이드바 메뉴 — 3 섹션 구조.
  *
- *   (top)        Dashboard, Monitoring, Analytics
+ *   (top)        Dashboard, Monitoring, Analytics, Revenue
  *   Financial Ops  Transactions, Financial Audit Log, Charge Attempts
  *   User Ops       Users·KYC, Community, Document AI
  *   System         Settings
@@ -46,6 +47,7 @@ const NAV_SECTIONS: NavSection[] = [
       { to: ROUTES.DASHBOARD, label: 'Dashboard', Icon: LayoutDashboard },
       { to: ROUTES.MONITORING, label: 'Monitoring', Icon: Activity },
       { to: ROUTES.ANALYTICS, label: 'Analytics', Icon: BarChart3 },
+      { to: ROUTES.REVENUE, label: 'Revenue', Icon: Wallet },
     ],
   },
   {

@@ -3,7 +3,13 @@ import FilterBar from '@/components/common/FilterBar';
 import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge from '@/components/common/Badge';
 import Modal from '@/components/common/Modal';
-import { useCommunityReports, useDeletePost, useDismissReport, usePostDetail } from '@/hooks/useAdminQueries';
+import Pagination from '@/components/common/Pagination';
+import {
+  useCommunityReports,
+  useDeletePost,
+  useDismissReport,
+  usePostDetail,
+} from '@/hooks/useAdminQueries';
 import { formatDateTime } from '@/utils/format';
 import type { AdminCommunityReport, ReportReason, ReportStatus } from '@/types/admin';
 import styles from './Community.module.css';
@@ -51,14 +57,18 @@ function statusTone(s: ReportStatus) {
 export default function Community() {
   const [reason, setReason] = useState<'ALL' | ReportReason>('ALL');
   const [status, setStatus] = useState<'ALL' | ReportStatus>('ALL');
+  const [page, setPage] = useState(0);
   const { data } = useCommunityReports({
     reason: reason !== 'ALL' ? reason : undefined,
     status: status !== 'ALL' ? status : undefined,
+    page,
   });
   const deletePost = useDeletePost();
   const dismissReport = useDismissReport();
   const [viewing, setViewing] = useState<AdminCommunityReport | null>(null);
-  const { data: postDetail, isLoading: detailLoading } = usePostDetail(viewing?.post_public_id ?? null);
+  const { data: postDetail, isLoading: detailLoading } = usePostDetail(
+    viewing?.post_public_id ?? null
+  );
 
   const rows = data?.reports ?? [];
 
@@ -131,7 +141,11 @@ export default function Community() {
             onClick={() => onDelete(r.post_public_id)}
             disabled={deletePost.isPending || r.status === 'RESOLVED_DELETED'}
           >
-            {r.status === 'RESOLVED_DELETED' ? '삭제됨' : deletePost.isPending ? '삭제 중…' : '삭제'}
+            {r.status === 'RESOLVED_DELETED'
+              ? '삭제됨'
+              : deletePost.isPending
+                ? '삭제 중…'
+                : '삭제'}
           </button>
         </div>
       ),
@@ -141,16 +155,13 @@ export default function Community() {
   return (
     <div>
       <h2 className={styles.sectionTitle}>Community 신고 처리</h2>
-      <FilterBar
-        actions={
-          <button type="button" className="primary" disabled>
-            선택 삭제
-          </button>
-        }
-      >
+      <FilterBar>
         <select
           value={reason}
-          onChange={(e) => setReason(e.target.value as 'ALL' | ReportReason)}
+          onChange={(e) => {
+            setReason(e.target.value as 'ALL' | ReportReason);
+            setPage(0);
+          }}
         >
           <option value="ALL">전체 사유</option>
           <option value="SPAM">스팸</option>
@@ -161,7 +172,10 @@ export default function Community() {
         </select>
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value as 'ALL' | ReportStatus)}
+          onChange={(e) => {
+            setStatus(e.target.value as 'ALL' | ReportStatus);
+            setPage(0);
+          }}
         >
           <option value="ALL">전체 상태</option>
           <option value="PENDING">미처리</option>
@@ -177,7 +191,19 @@ export default function Community() {
         emptyText="신고된 게시글이 없습니다."
       />
 
-      <Modal open={viewing !== null} onClose={() => setViewing(null)} title="신고 상세" maxWidth={560}>
+      <Pagination
+        page={data?.page ?? 0}
+        totalPages={data?.total_pages ?? 1}
+        totalElements={data?.total_elements ?? 0}
+        onPageChange={setPage}
+      />
+
+      <Modal
+        open={viewing !== null}
+        onClose={() => setViewing(null)}
+        title="신고 상세"
+        maxWidth={560}
+      >
         {viewing && (
           <ul className={styles.detailList}>
             <li>

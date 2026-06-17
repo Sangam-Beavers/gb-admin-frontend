@@ -6,6 +6,7 @@ import DataTable, { type ColumnDef } from '@/components/common/DataTable';
 import Badge, { type BadgeTone } from '@/components/common/Badge';
 import Modal from '@/components/common/Modal';
 import AlertBanner from '@/components/common/AlertBanner';
+import Pagination from '@/components/common/Pagination';
 import { useTransactions, useTransactionAuditTrail, useAlerts } from '@/hooks/useAdminQueries';
 import { adminApi } from '@/api/admin';
 import {
@@ -16,13 +17,7 @@ import {
   formatTimeWithMillis,
 } from '@/utils/format';
 import { ROUTES } from '@/constants/routes';
-import type {
-  AdminTransaction,
-  FinancialAuditLog,
-  TxRisk,
-  TxStatus,
-  TxType,
-} from '@/types/admin';
+import type { AdminTransaction, FinancialAuditLog, TxRisk, TxStatus, TxType } from '@/types/admin';
 import styles from './TransactionLogs.module.css';
 
 const TYPE_LABEL: Record<TxType, string> = {
@@ -77,6 +72,7 @@ export default function TransactionLogs() {
   const [period, setPeriod] = useState('TODAY');
   const [type, setType] = useState<'ALL' | TxType>('ALL');
   const [risk, setRisk] = useState<'ALL' | TxRisk>('ALL');
+  const [page, setPage] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [trailTxId, setTrailTxId] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -85,6 +81,7 @@ export default function TransactionLogs() {
   const { data } = useTransactions({
     type: type !== 'ALL' ? type : undefined,
     risk: risk !== 'ALL' ? risk : undefined,
+    page,
   });
   const trail = useTransactionAuditTrail(trailTxId);
 
@@ -200,12 +197,24 @@ export default function TransactionLogs() {
           </button>
         }
       >
-        <select value={period} onChange={(e) => setPeriod(e.target.value)}>
+        <select
+          value={period}
+          onChange={(e) => {
+            setPeriod(e.target.value);
+            setPage(0);
+          }}
+        >
           <option value="TODAY">오늘</option>
           <option value="WEEK">최근 7일</option>
           <option value="MONTH">최근 30일</option>
         </select>
-        <select value={type} onChange={(e) => setType(e.target.value as 'ALL' | TxType)}>
+        <select
+          value={type}
+          onChange={(e) => {
+            setType(e.target.value as 'ALL' | TxType);
+            setPage(0);
+          }}
+        >
           <option value="ALL">전체 유형</option>
           <option value="INTERNAL_TRANSFER">앱내이체</option>
           <option value="REMITTANCE">해외송금</option>
@@ -213,7 +222,13 @@ export default function TransactionLogs() {
           <option value="CHARGE">충전</option>
           <option value="PAYOUT">현금화</option>
         </select>
-        <select value={risk} onChange={(e) => setRisk(e.target.value as 'ALL' | TxRisk)}>
+        <select
+          value={risk}
+          onChange={(e) => {
+            setRisk(e.target.value as 'ALL' | TxRisk);
+            setPage(0);
+          }}
+        >
           <option value="ALL">전체 위험도</option>
           <option value="LOW">정상</option>
           <option value="MEDIUM">주의</option>
@@ -226,6 +241,13 @@ export default function TransactionLogs() {
         rows={rows}
         rowKey={(r) => r.transaction_public_id}
         emptyText="조회된 거래가 없습니다."
+      />
+
+      <Pagination
+        page={data?.page ?? 0}
+        totalPages={data?.total_pages ?? 1}
+        totalElements={data?.total_elements ?? 0}
+        onPageChange={setPage}
       />
 
       <Modal

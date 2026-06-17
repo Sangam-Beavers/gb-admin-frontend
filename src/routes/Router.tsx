@@ -6,6 +6,7 @@ import Callback from '@/pages/auth/Callback/Callback';
 import Dashboard from '@/pages/Dashboard/Dashboard';
 import Monitoring from '@/pages/Monitoring/Monitoring';
 import Analytics from '@/pages/Analytics/Analytics';
+import Revenue from '@/pages/Revenue/Revenue';
 import TransactionLogs from '@/pages/TransactionLogs/TransactionLogs';
 import TransactionAuditTrail from '@/pages/TransactionLogs/TransactionAuditTrail';
 import FinancialAuditLog from '@/pages/FinancialAuditLog/FinancialAuditLog';
@@ -30,6 +31,7 @@ export default function Router() {
           <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
           <Route path={ROUTES.MONITORING} element={<Monitoring />} />
           <Route path={ROUTES.ANALYTICS} element={<Analytics />} />
+          <Route path={ROUTES.REVENUE} element={<Revenue />} />
 
           {/* 금융 운영 */}
           <Route path={ROUTES.TRANSACTIONS} element={<TransactionLogs />} />
