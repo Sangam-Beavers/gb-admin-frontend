@@ -19,55 +19,58 @@ import styles from './Sidebar.module.css';
 
 interface NavItem {
   to: string;
-  labelKey: string;
+  label: string;
   Icon: typeof LayoutDashboard;
 }
 
 interface NavSection {
   /** undefined 면 헤더 없는 최상단 그룹(Dashboard·Monitoring). */
-  labelKey?: string;
+  label?: string;
   items: NavItem[];
 }
 
 /**
  * 사이드바 메뉴 — 3 섹션 구조.
  *
- *   (top)        Dashboard, Monitoring
- *   금융 운영    Transactions, Financial Audit Log, Charge Attempts
- *   사용자 운영  Users·KYC, Community, Document AI
- *   시스템       Settings
+ *   (top)        Dashboard, Monitoring, Analytics
+ *   Financial Ops  Transactions, Financial Audit Log, Charge Attempts
+ *   User Ops       Users·KYC, Community, Document AI
+ *   System         Settings
+ *
+ * ⚠️ 라벨/섹션명은 i18n(t())을 타지 않고 **영어로 하드코딩**한다. 운영 콘솔 탭 간 통일성을 위해
+ * 로케일과 무관하게 항상 영어로 보이게 한다(한국어 환경에서 'Analytics' 등이 한글로 튀던 문제 방지).
  */
 const NAV_SECTIONS: NavSection[] = [
   {
     items: [
-      { to: ROUTES.DASHBOARD, labelKey: 'nav.dashboard', Icon: LayoutDashboard },
-      { to: ROUTES.MONITORING, labelKey: 'nav.monitoring', Icon: Activity },
-      { to: ROUTES.ANALYTICS, labelKey: 'nav.analytics', Icon: BarChart3 },
+      { to: ROUTES.DASHBOARD, label: 'Dashboard', Icon: LayoutDashboard },
+      { to: ROUTES.MONITORING, label: 'Monitoring', Icon: Activity },
+      { to: ROUTES.ANALYTICS, label: 'Analytics', Icon: BarChart3 },
     ],
   },
   {
-    labelKey: 'nav.section.financial',
+    label: 'Financial Ops',
     items: [
-      { to: ROUTES.TRANSACTIONS, labelKey: 'nav.transactions', Icon: Receipt },
+      { to: ROUTES.TRANSACTIONS, label: 'Transactions', Icon: Receipt },
       {
         to: ROUTES.FINANCIAL_AUDIT_LOG,
-        labelKey: 'nav.financialAuditLog',
+        label: 'Financial Audit Log',
         Icon: ShieldCheck,
       },
-      { to: ROUTES.CHARGE_ATTEMPTS, labelKey: 'nav.chargeAttempts', Icon: CreditCard },
+      { to: ROUTES.CHARGE_ATTEMPTS, label: 'Charge Attempts', Icon: CreditCard },
     ],
   },
   {
-    labelKey: 'nav.section.userOps',
+    label: 'User Ops',
     items: [
-      { to: ROUTES.USERS, labelKey: 'nav.users', Icon: UsersIcon },
-      { to: ROUTES.COMMUNITY, labelKey: 'nav.community', Icon: MessageSquare },
-      { to: ROUTES.DOCUMENTS, labelKey: 'nav.documents', Icon: FileText },
+      { to: ROUTES.USERS, label: 'Users · KYC', Icon: UsersIcon },
+      { to: ROUTES.COMMUNITY, label: 'Community', Icon: MessageSquare },
+      { to: ROUTES.DOCUMENTS, label: 'Document AI', Icon: FileText },
     ],
   },
   {
-    labelKey: 'nav.section.system',
-    items: [{ to: ROUTES.SETTINGS, labelKey: 'nav.settings', Icon: SettingsIcon }],
+    label: 'System',
+    items: [{ to: ROUTES.SETTINGS, label: 'Settings', Icon: SettingsIcon }],
   },
 ];
 
@@ -86,10 +89,10 @@ export default function Sidebar() {
       <nav className={styles.nav}>
         {NAV_SECTIONS.map((section, sIdx) => (
           <div key={sIdx} className={styles.section}>
-            {section.labelKey && (
-              <div className={styles.sectionHeader}>{t(section.labelKey)}</div>
+            {section.label && (
+              <div className={styles.sectionHeader}>{section.label}</div>
             )}
-            {section.items.map(({ to, labelKey, Icon }) => (
+            {section.items.map(({ to, label, Icon }) => (
               <NavLink
                 key={to}
                 to={to}
@@ -98,7 +101,7 @@ export default function Sidebar() {
                 }
               >
                 <Icon size={18} />
-                <span>{t(labelKey)}</span>
+                <span>{label}</span>
               </NavLink>
             ))}
           </div>
