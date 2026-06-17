@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopHeader from './TopHeader';
+import ScrollToTop from './ScrollToTop';
 import styles from './AdminLayout.module.css';
 
 /**
@@ -12,6 +13,7 @@ import styles from './AdminLayout.module.css';
 export default function AdminLayout() {
   return (
     <div className={styles.shell}>
+      <ScrollToTop />
       <Sidebar />
       <div className={styles.content}>
         <TopHeader />

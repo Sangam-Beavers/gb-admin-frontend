@@ -20,6 +20,7 @@
   border: 1px solid var(--admin-border);
   color: var(--admin-text);
   font-size: 12px;
+  white-space: nowrap; /* "감사 로그"가 두 줄로 줄바꿈되지 않게 */
   transition:
     background 0.15s ease,
     border-color 0.15s ease;
